@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "Strands Agent Patterns",
-  "description": "When editing files that involve AI agent patterns (tool-calling, multi-turn conversations, agent orchestration), activate the Strands power and consult its docs for correct agent construction, tool definitions, and conversation management.",
+  "description": "When editing files that involve AI agent patterns\\n(tool-calling, multi-turn conversations, agent orchestration),\\nactivate the Strands power and consult its docs for correct\\nagent construction, tool definitions, and conversation management.",
   "version": "1",
   "when": {
     "type": "userTriggered"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Check if the edited file contains AI agent patterns (e.g., @tool decorator, Agent class, tool_use, tool_result, conversation history, multi-turn, orchestrator, agent chain, or strands imports). If it does, activate the Strands power (kiroPowers action=\"activate\" powerName=\"strands\") and search its docs for the relevant agent pattern (tool creation, agent configuration, conversation management, multi-agent orchestration). Ensure the implementation follows CIC standards: thin Lambda handlers, type hints, proper error handling, no hardcoded credentials, and AI outputs sanitized before use. If the file has no agent-related code, do nothing."
+    "prompt": "Check if the edited file contains AI agent patterns\\n(e.g., @tool decorator, Agent class, tool_use, tool_result,\\nconversation history, multi-turn, orchestrator, agent chain,\\nor strands imports).\\n\\nIf it does, activate the Strands power\\n(kiroPowers action=\\\"activate\\\" powerName=\\\"strands\\\")\\nand search its docs for the relevant agent pattern\\n(tool creation, agent configuration, conversation management,\\nmulti-agent orchestration).\\n\\nEnsure the implementation follows CIC standards:\\n- Thin Lambda handlers\\n- Type hints\\n- Proper error handling\\n- No hardcoded credentials\\n- AI outputs sanitized before use\\n\\nIf the file has no agent-related code, do nothing."
   },
   "workspaceFolderName": "Repository-Template",
   "shortName": "strands-agent-patterns"

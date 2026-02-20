@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "name": "Strands Bedrock Assist",
-  "description": "When editing Lambda or CDK files that involve Bedrock model calls, automatically activate the Strands power and consult its documentation for correct patterns, model configuration, and best practices.",
+  "description": "When editing Lambda or CDK files that involve Bedrock model calls, automatically activate the Strands power and consult its documentation to for correct patterns, model configuration, and best practices.",
   "version": "1",
   "when": {
     "type": "userTriggered"

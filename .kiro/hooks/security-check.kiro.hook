@@ -1,13 +1,13 @@
 {
   "enabled": true,
   "name": "Security Check",
-  "description": "Run intelligent security checks using cdk-nag and/or ASH. Ask user for scope, then analyze and provide remediation guidance.",
+  "description": "Run intelligent security checks using cdk-nag and/or ASH.\\nAsk user for scope, then analyze and provide remediation guidance.",
   "version": "1",
   "when": {
     "type": "userTriggered"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "The user has triggered a security check. Follow the workflow in #security-check-workflow.md to:\n1. Ask the user what scope they want to scan (specific files/dirs, backend only, frontend only, or full codebase)\n2. Determine which tools to use based on their response\n3. Run the appropriate security scans\n4. Parse and prioritize findings\n5. Provide remediation guidance\n6. Offer to apply fixes"
+    "prompt": "The user has triggered a security check.\\nFollow the workflow in #security-check-workflow.md to:\\n1. Ask the user what scope they want to scan\\n   (specific files/dirs, backend only, frontend only, or full codebase)\\n2. Determine which tools to use based on their response\\n3. Run the appropriate security scans\\n4. Parse and prioritize findings\\n5. Provide remediation guidance\\n6. Offer to apply fixes"
   }
 }

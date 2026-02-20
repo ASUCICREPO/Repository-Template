@@ -1,14 +1,14 @@
 {
   "enabled": true,
   "name": "Strands AI Workflows",
-  "description": "When editing CDK stack or Step Functions files that define AI workflows (Bedrock in Step Functions, chained Lambda calls with model invocations, AI pipeline orchestration), activate the Strands power for architecture guidance.",
+  "description": "When editing CDK stack or Step Functions files that define\\nAI workflows (Bedrock in Step Functions, chained Lambda calls\\nwith model invocations, AI pipeline orchestration),\\nactivate the Strands power for architecture guidance.",
   "version": "1",
   "when": {
     "type": "userTriggered"
   },
   "then": {
     "type": "askAgent",
-    "prompt": "Check if the edited file defines AI workflow infrastructure (e.g., Step Functions with Bedrock tasks, Lambda chains that invoke models, BedrockInvokeModel task, AI pipeline definitions, or references to foundation models in CDK constructs). If it does, activate the Strands power (kiroPowers action=\"activate\" powerName=\"strands\") and search its docs for workflow patterns, model provider configuration, and agent orchestration approaches. Verify the infrastructure follows CIC standards: IAM least privilege with specific Bedrock model ARNs, retry/catch on all Step Functions tasks, DLQs configured, and proper error handling. If the file has no AI workflow code, do nothing."
+    "prompt": "Check if the edited file defines AI workflow infrastructure\\n(e.g., Step Functions with Bedrock tasks, Lambda chains that\\ninvoke models, BedrockInvokeModel task, AI pipeline definitions,\\nor references to foundation models in CDK constructs).\\n\\nIf it does, activate the Strands power\\n(kiroPowers action=\\\"activate\\\" powerName=\\\"strands\\\")\\nand search its docs for workflow patterns, model provider\\nconfiguration, and agent orchestration approaches.\\n\\nVerify the infrastructure follows CIC standards:\\n- IAM least privilege with specific Bedrock model ARNs\\n- Retry/catch on all Step Functions tasks\\n- DLQs configured\\n- Proper error handling\\n\\nIf the file has no AI workflow code, do nothing."
   },
   "workspaceFolderName": "Repository-Template",
   "shortName": "strands-ai-workflows"
