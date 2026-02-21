@@ -178,76 +178,76 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
     - **Property 5: Source Citation Inclusion**
     - **Validates: Requirements 3.3**
 
-- [~] 11. Implement Collections API Connector Lambda
-  - [~] 11.1 Create Collections API connector
+- [x] 11. Implement Collections API Connector Lambda
+  - [x] 11.1 Create Collections API connector
     - Set up Python 3.13 Lambda for custom KB data source
     - Implement API client for searchcollections.cincymuseum.org
     - Handle pagination (100 items per page)
     - Extract metadata (title, description, date, category)
     - _Requirements: 6.1, 6.2, 6.3_
   
-  - [~] 11.2 Format data for Knowledge Base
+  - [x] 11.2 Format data for Knowledge Base
     - Convert collection items to text documents
     - Include metadata in document structure
     - Write to S3 in KB-compatible format
     - Trigger KB sync after writing
     - _Requirements: 6.4, 6.5_
   
-  - [~] 11.3 Add error handling and retry logic
+  - [x] 11.3 Add error handling and retry logic
     - Implement retry with exponential backoff (max 3 attempts)
     - Log errors to CloudWatch
     - Handle API rate limits
     - _Requirements: 5.8, 14.1_
 
-- [~] 12. Implement Podcast Ingestion Lambda
-  - [~] 12.1 Create podcast RSS ingestion handler
+- [x] 12. Implement Podcast Ingestion Lambda
+  - [x] 12.1 Create podcast RSS ingestion handler
     - Set up Python 3.13 Lambda triggered by EventBridge
     - Fetch RSS feed from feed.podbean.com/cincinnatimuseumcenter/feed.xml
     - Parse RSS using feedparser library
     - Extract episode metadata (title, description, pub_date, audio_url)
     - _Requirements: 8.1, 8.2_
   
-  - [~] 12.2 Write episodes to S3 for KB ingestion
+  - [x] 12.2 Write episodes to S3 for KB ingestion
     - Convert episodes to text documents
     - Write to S3 podcasts/ folder
     - Include metadata in document
     - Trigger KB sync after writing
     - _Requirements: 8.3, 8.4, 8.5_
 
-- [~] 13. Implement KB Sync Handler Lambda
-  - [~] 13.1 Create KB sync orchestrator
+- [x] 13. Implement KB Sync Handler Lambda
+  - [x] 13.1 Create KB sync orchestrator
     - Set up Python 3.13 Lambda triggered by EventBridge
     - Implement StartIngestionJob API calls for each data source
     - Support selective sync (web, s3-pdfs, s3-podcasts, collections)
     - Log sync status to CloudWatch
     - _Requirements: 5.7, 7.6, 8.5_
   
-  - [~] 13.2 Add IAM permissions for sync Lambda
+  - [x] 13.2 Add IAM permissions for sync Lambda
     - Grant bedrock:StartIngestionJob permission with specific KB ARN
     - Grant S3 read permissions for triggering syncs
     - _Requirements: 17.3_
 
-- [~] 14. Configure EventBridge scheduled rules for syncs
+- [x] 14. Configure EventBridge scheduled rules for syncs
   - Create EventBridge rule for event feeds (every 6 hours)
   - Create EventBridge rule for websites, collections, podcasts (every 24 hours)
   - Configure rules to trigger KB Sync Handler Lambda
   - Add IAM permissions for EventBridge to invoke Lambda
   - _Requirements: 5.7, 7.6, 8.5_
 
-- [~] 15. Implement Admin Handler Lambda for dashboard APIs
-  - [~] 15.1 Create admin handler with Lambda Function URL
+- [x] 15. Implement Admin Handler Lambda for dashboard APIs
+  - [x] 15.1 Create admin handler with Lambda Function URL
     - Set up Python 3.13 Lambda with CORS support
     - Implement authentication check using Cognito JWT
     - Validate user role from custom:role attribute
     - _Requirements: 12.1, 12.3, 12.4_
   
-  - [~] 15.2 Implement conversation log query endpoint
+  - [x] 15.2 Implement conversation log query endpoint
     - Query DynamoDB with filters (date range, language, confidence, feedback)
     - Support pagination with nextToken
     - Enforce role-based access (Admin and Viewer can read)
     - _Requirements: 10.4, 10.5_
   
-  - [~] 15.3 Implement PDF upload endpoint
+  - [x] 15.3 Implement PDF upload endpoint
     - Accept multipart/form-data PDF uploads (max 10MB)
     - Store PDF in S3 with UUID key
     - Create PDFMetadata entry with 'processing' status
@@ -255,20 +255,20 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
     - Require Admin role
     - _Requirements: 9.1, 9.4, 12.3_
   
-  - [~] 15.4 Implement PDF deletion endpoint
+  - [x] 15.4 Implement PDF deletion endpoint
     - Delete PDF from S3
     - Trigger KB sync to remove from index
     - Update PDFMetadata status
     - Require Admin role
     - _Requirements: 9.3, 9.7, 12.3_
   
-  - [~] 15.5 Implement PDF list endpoint
+  - [x] 15.5 Implement PDF list endpoint
     - Query PDFMetadata table
     - Return list with upload date, file size, status
     - Allow Admin and Viewer roles
     - _Requirements: 9.2_
   
-  - [~] 15.6 Implement FAQ analytics endpoint using CloudWatch Logs Insights
+  - [x] 15.6 Implement FAQ analytics endpoint using CloudWatch Logs Insights
     - Query CloudWatch Logs for conversation questions
     - Use Logs Insights aggregation queries
     - Group similar questions by keyword matching
@@ -276,30 +276,30 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
     - Return top 20 FAQs ordered by count
     - _Requirements: 13.1, 13.2, 13.3, 13.4_
   
-  - [~] 15.7 Implement feedback statistics endpoint
+  - [x] 15.7 Implement feedback statistics endpoint
     - Query DynamoDB for conversations with feedback
     - Calculate total responses, positive count, negative count
     - Support filtering by negative feedback
     - _Requirements: 11.3, 11.4_
   
-  - [~] 15.8 Implement system health metrics endpoint
+  - [x] 15.8 Implement system health metrics endpoint
     - Query CloudWatch for Lambda duration metrics
     - Calculate error rate from Lambda errors and invocations
     - Return avg/max response time, error rate, total requests
     - _Requirements: 14.5_
   
-  - [~] 15.9 Implement CSV export for FAQ data
+  - [x] 15.9 Implement CSV export for FAQ data
     - Generate valid CSV with headers
     - Properly escape fields
     - _Requirements: 13.5_
   
-  - [~] 15.10 Configure Lambda Function URL with CORS
+  - [x] 15.10 Configure Lambda Function URL with CORS
     - Add Function URL with NONE auth type (JWT validated in handler)
     - Configure CORS for Amplify and localhost
     - Output Function URL in CDK stack
     - _Requirements: 18.3_
   
-  - [~] 15.11 Add IAM permissions for admin Lambda
+  - [x] 15.11 Add IAM permissions for admin Lambda
     - Grant DynamoDB read access to ConversationLogs
     - Grant S3 read/write access to PDF bucket
     - Grant DynamoDB read/write to PDFMetadata
@@ -324,7 +324,7 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
     - **Property 28: FAQ Top-N Ordering**
     - **Validates: Requirements 13.2**
 
-- [~] 17. Configure CloudWatch alarms and monitoring
+- [x] 17. Configure CloudWatch alarms and monitoring
   - Create alarm for error rate > 5% over 5 minutes
   - Create alarm for Bedrock throttling > 10/minute
   - Create alarm for Lambda errors > 10/minute
@@ -332,7 +332,7 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
   - Configure SNS topic for alarm notifications
   - _Requirements: 14.6_
 
-- [~] 18. Add CfnOutputs for all backend resources
+- [x] 18. Add CfnOutputs for all backend resources
   - Output Chat Function URL
   - Output Admin Function URL
   - Output Knowledge Base ID
@@ -343,7 +343,7 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
   - Output Cognito User Pool ID and Client ID
   - _Requirements: 17.6_
 
-- [~] 19. Checkpoint - Verify backend functionality
+- [x] 19. Checkpoint - Verify backend functionality
   - Deploy complete backend stack
   - Test Chat Lambda with sample queries
   - Verify KB returns relevant results with citations
@@ -353,22 +353,22 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
   - Check CloudWatch logs for errors
   - Ensure all tests pass, ask the user if questions arise
 
-- [~] 20. Set up Next.js frontend project
+- [x] 20. Set up Next.js frontend project
   - Create Next.js 15+ project with TypeScript and App Router
   - Install dependencies: @aws-amplify/ui-react, tailwindcss, aws-amplify
   - Configure tailwind.config.ts with responsive breakpoints
   - Set up frontend/app, frontend/components, frontend/lib, frontend/contexts directories
   - _Requirements: 1.5, 2.4_
 
-- [~] 21. Implement frontend API client utilities
-  - [~] 21.1 Create chat API client
+- [x] 21. Implement frontend API client utilities
+  - [x] 21.1 Create chat API client
     - Implement sendMessage function calling Chat Lambda Function URL
     - Handle response parsing (text, sources, confidence)
     - Implement submitFeedback function
     - Generate and manage 33+ character session IDs in sessionStorage
     - _Requirements: 1.2, 3.3, 11.2_
   
-  - [~] 21.2 Create admin API client
+  - [x] 21.2 Create admin API client
     - Implement getConversations with filter parameters
     - Implement uploadPDF with multipart/form-data
     - Implement deletePDF function
@@ -378,66 +378,66 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
     - Include Cognito JWT token in all requests
     - _Requirements: 10.4, 9.1, 9.3, 9.2, 13.2, 14.5_
   
-  - [ ] 21.3 Create Amplify configuration
+  - [x] 21.3 Create Amplify configuration
     - Configure Amplify with Cognito User Pool
     - Set up authentication flow
     - _Requirements: 12.1_
 
-- [ ] 22. Implement language context and i18n
-  - [ ] 22.1 Create LanguageContext
+- [x] 22. Implement language context and i18n
+  - [x] 22.1 Create LanguageContext
     - Implement React Context for language preference
     - Support 'en' and 'es' values
     - Persist preference in sessionStorage
     - _Requirements: 2.1, 2.5_
   
-  - [ ] 22.2 Create translation utilities
+  - [x] 22.2 Create translation utilities
     - Define opening message in English and Spanish
     - Define fallback message in both languages
     - Define UI labels in both languages
     - _Requirements: 1.3, 2.3, 3.5_
 
-- [ ] 23. Implement Chat Interface components
-  - [ ] 23.1 Create ChatContainer component
+- [x] 23. Implement Chat Interface components
+  - [x] 23.1 Create ChatContainer component
     - Implement main layout with language selector
     - Display opening message on initial load
     - Manage conversation state
     - _Requirements: 1.3, 2.1_
   
-  - [ ] 23.2 Create MessageList component
+  - [x] 23.2 Create MessageList component
     - Display conversation history
     - Render user and assistant messages
     - _Requirements: 1.4_
   
-  - [ ] 23.3 Create MessageInput component
+  - [x] 23.3 Create MessageInput component
     - Text input with submit button
     - Validate message length (1-1000 characters)
     - Handle Enter key submission
     - Disable during response generation
     - _Requirements: 1.1, 18.4_
   
-  - [ ] 23.4 Create ResponseMessage component
+  - [x] 23.4 Create ResponseMessage component
     - Display chatbot response
     - Show confidence indicator
     - Handle low confidence fallback display
     - _Requirements: 3.4, 3.5_
   
-  - [ ] 23.5 Create SourceCitation component
+  - [x] 23.5 Create SourceCitation component
     - Display linked sources with title and URL
     - Group by source type (website, collection, event, podcast, pdf)
     - _Requirements: 3.3_
   
-  - [ ] 23.6 Create FeedbackButtons component
+  - [x] 23.6 Create FeedbackButtons component
     - Display thumbs up and thumbs down buttons
     - Submit feedback on click
     - Disable after feedback submitted
     - _Requirements: 11.1, 11.5_
   
-  - [ ] 23.7 Create LanguageSelector component
+  - [x] 23.7 Create LanguageSelector component
     - Toggle between English and Spanish
     - Update LanguageContext on change
     - _Requirements: 2.1_
   
-  - [ ] 23.8 Style components with Tailwind CSS
+  - [x] 23.8 Style components with Tailwind CSS
     - Implement responsive design for mobile, tablet, desktop
     - Follow accessibility best practices
     - _Requirements: 1.5_
@@ -459,48 +459,48 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
     - Verify thumbs up/down submit feedback
     - _Requirements: 11.1_
 
-- [ ] 25. Implement Admin Dashboard components
-  - [ ] 25.1 Create LoginPage component
+- [x] 25. Implement Admin Dashboard components
+  - [x] 25.1 Create LoginPage component
     - Implement Cognito authentication flow with Amplify
     - Display login form
     - Handle authentication errors
     - _Requirements: 12.1_
   
-  - [ ] 25.2 Create ConversationLogs component
+  - [x] 25.2 Create ConversationLogs component
     - Display searchable table of conversation history
     - Implement filters (date range, language, confidence, feedback)
     - Support pagination
     - _Requirements: 10.4, 10.5_
   
-  - [ ] 25.3 Create PDFManager component
+  - [x] 25.3 Create PDFManager component
     - Display list of PDFs with upload date, file size, status
     - Implement upload interface (max 10MB)
     - Implement delete button (Admin only)
     - Show processing status
     - _Requirements: 9.1, 9.2, 9.3_
   
-  - [ ] 25.4 Create FAQAnalytics component
+  - [x] 25.4 Create FAQAnalytics component
     - Display top 20 FAQs with count and avg confidence
     - Show category groupings
     - Implement CSV export button
     - _Requirements: 13.2, 13.5_
   
-  - [ ] 25.5 Create SystemHealth component
+  - [x] 25.5 Create SystemHealth component
     - Display real-time metrics (response time, error rate, request count)
     - Show service availability indicators
     - _Requirements: 14.5_
   
-  - [ ] 25.6 Create FeedbackReview component
+  - [x] 25.6 Create FeedbackReview component
     - Display responses with negative feedback
     - Support filtering and sorting
     - _Requirements: 11.4_
   
-  - [ ] 25.7 Implement role-based UI rendering
+  - [x] 25.7 Implement role-based UI rendering
     - Show/hide upload and delete buttons based on role
     - Display read-only message for Viewer role
     - _Requirements: 12.3, 12.4_
   
-  - [ ] 25.8 Implement session timeout handling
+  - [x] 25.8 Implement session timeout handling
     - Detect session expiration (30 minutes)
     - Redirect to login on timeout
     - _Requirements: 12.5_
@@ -519,49 +519,49 @@ This implementation plan follows a "backend first" approach using Amazon Bedrock
     - Verify filters work correctly
     - _Requirements: 10.4, 10.5_
 
-- [ ] 27. Configure Amplify deployment
-  - [ ] 27.1 Create Amplify App in CDK stack
+- [x] 27. Configure Amplify deployment
+  - [x] 27.1 Create Amplify App in CDK stack
     - Configure GitHub source code provider with OAuth token
     - Add SPA rewrite rule (catch-all → index.html)
     - Create main branch
     - _Requirements: 19.2_
   
-  - [ ] 27.2 Pass backend URLs to frontend
+  - [x] 27.2 Pass backend URLs to frontend
     - Add environment variables for Chat Function URL
     - Add environment variables for Admin Function URL
     - Add environment variables for Cognito User Pool ID and Client ID
     - _Requirements: 19.1_
   
-  - [ ] 27.3 Configure auto-trigger build on deploy
+  - [x] 27.3 Configure auto-trigger build on deploy
     - Create custom resource to trigger Amplify build
     - Configure on create and update
     - _Requirements: 19.2_
   
-  - [ ] 27.4 Output Amplify URL
+  - [x] 27.4 Output Amplify URL
     - Construct Amplify URL from appId
     - Add CfnOutput for frontend URL
     - _Requirements: 17.6_
 
-- [ ] 28. Update CORS configurations with Amplify URL
+- [x] 28. Update CORS configurations with Amplify URL
   - Update Chat Lambda Function URL CORS with Amplify URL
   - Update Admin Lambda Function URL CORS with Amplify URL
   - Update S3 bucket CORS with Amplify URL
   - _Requirements: 18.3_
 
-- [ ] 29. Implement deployment scripts and documentation
-  - [ ] 29.1 Create deployment script
+- [x] 29. Implement deployment scripts and documentation
+  - [x] 29.1 Create deployment script
     - Script to deploy CDK stack with environment parameter
     - Script to create initial Cognito admin user
     - Script to trigger initial KB sync
     - _Requirements: 19.2, 19.3_
   
-  - [ ] 29.2 Create environment configuration
+  - [x] 29.2 Create environment configuration
     - Document required context variables
     - Document SSM Parameter Store parameters
     - Validate no hardcoded credentials in code
     - _Requirements: 19.1, 19.4, 19.5_
   
-  - [ ] 29.3 Write deployment documentation
+  - [x] 29.3 Write deployment documentation
     - Document deployment steps for dev/staging/production
     - Document environment-specific parameters
     - Document Cognito user creation process
