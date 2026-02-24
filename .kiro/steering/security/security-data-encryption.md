@@ -29,7 +29,8 @@ const myBucket = new s3.Bucket(this, 'MyBucket', {
   encryption: s3.BucketEncryption.S3_MANAGED,
   enforceSSL: true,
   versioned: true,
-  removalPolicy: cdk.RemovalPolicy.RETAIN,
+  removalPolicy: cdk.RemovalPolicy.DESTROY,
+  autoDeleteObjects: true,
   serverAccessLogsBucket: logBucket,
   serverAccessLogsPrefix: 'my-bucket-logs/',
 });
