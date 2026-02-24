@@ -47,6 +47,8 @@ iam.PolicyStatement(
 ### Example: Correct Pattern
 
 ```typescript
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+
 // Infrastructure (CDK)
 const secret = secretsmanager.Secret.fromSecretNameV2(this, 'MySecret', 'my-app/credentials');
 myFunction.addEnvironment('SECRET_ARN', secret.secretArn);
