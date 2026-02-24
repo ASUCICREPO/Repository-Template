@@ -24,6 +24,16 @@ S3 security, data encryption, and data classification best practices for CIC pro
 ### Example: Secure Bucket in CDK
 
 ```typescript
+import * as cdk from 'aws-cdk-lib';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+
+const logBucket = new s3.Bucket(this, 'LogBucket', {
+  blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+  encryption: s3.BucketEncryption.S3_MANAGED,
+  enforceSSL: true,
+  removalPolicy: cdk.RemovalPolicy.RETAIN,
+});
+
 const myBucket = new s3.Bucket(this, 'MyBucket', {
   blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
   encryption: s3.BucketEncryption.S3_MANAGED,
