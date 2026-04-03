@@ -19,7 +19,30 @@ Verification items are plain bullet points describing compliance checks. Each it
 
 ---
 
-## Rule CIC-01: Serverless-First Architecture
+## Rule CIC-01: Repository Structure and Language Conformance
+
+**Rule**: Before generating any code or project artifacts, the agent MUST scan the existing repository to understand:
+1. The current directory hierarchy (folder structure, naming conventions, nesting patterns)
+2. The languages and frameworks already in use (file extensions, config files, import patterns)
+3. Existing conventions (naming style, module organization, config file locations)
+
+All generated code MUST conform to the established repository template:
+- New files MUST be placed in the correct existing directories (e.g., Lambda handlers in `backend/lambda/`, CDK stacks in `backend/lib/`, React components in `frontend/components/`)
+- New directories MUST follow the naming conventions of existing directories (e.g., lowercase, kebab-case, or whatever the repo uses)
+- Generated code MUST use the same languages as the existing codebase for the same layer (e.g., if backend infrastructure is TypeScript CDK, new infrastructure must also be TypeScript CDK; if Lambda handlers are Python, new handlers must also be Python)
+- Do NOT introduce new top-level directories or restructure existing ones without explicit user approval
+- Do NOT introduce new languages or frameworks that conflict with what the repo already uses
+
+**Verification**:
+- The agent performed a directory scan before generating code
+- All new files are placed within the existing directory structure
+- No new top-level directories were created without user approval
+- Generated code uses the same languages as existing code for the same layer
+- File and folder naming conventions match the existing repo patterns
+
+---
+
+## Rule CIC-02: Serverless-First Architecture
 
 **Rule**: All CIC projects MUST use a serverless-first architecture. The default service choices are:
 - Compute: AWS Lambda
@@ -37,7 +60,7 @@ Non-serverless services (EC2, ECS, RDS, etc.) require explicit justification doc
 
 ---
 
-## Rule CIC-02: CDK Infrastructure Only
+## Rule CIC-03: CDK Infrastructure Only
 
 **Rule**: All AWS infrastructure MUST be defined using AWS CDK with TypeScript. Use L2 or L3 constructs exclusively — never L1 (Cfn*) constructs unless no L2/L3 equivalent exists (document the exception). No manual AWS Console configurations.
 
@@ -48,7 +71,7 @@ Non-serverless services (EC2, ECS, RDS, etc.) require explicit justification doc
 
 ---
 
-## Rule CIC-03: Technology Stack Compliance
+## Rule CIC-04: Technology Stack Compliance
 
 **Rule**: CIC projects MUST use the following technology stack:
 - **Frontend**: Next.js (latest stable supported by Amplify) with TypeScript, Tailwind CSS
@@ -66,7 +89,7 @@ Deviations require an ADR with justification.
 
 ---
 
-## Rule CIC-04: No Hardcoded Configuration
+## Rule CIC-05: No Hardcoded Configuration
 
 **Rule**: No secrets, credentials, API keys, resource ARNs, account IDs, or environment-specific configuration may be hardcoded in source code or IaC templates. All configuration MUST be provided via:
 - Environment variables (for Lambda runtime config)
@@ -81,7 +104,7 @@ Deviations require an ADR with justification.
 
 ---
 
-## Rule CIC-05: IAM Least Privilege
+## Rule CIC-06: IAM Least Privilege
 
 **Rule**: Every IAM policy, role, or permission MUST follow least privilege:
 - Use CDK grant methods first (`table.grantReadWriteData(fn)`, `bucket.grantRead(fn)`)
@@ -97,7 +120,7 @@ Deviations require an ADR with justification.
 
 ---
 
-## Rule CIC-06: CORS Configuration
+## Rule CIC-07: CORS Configuration
 
 **Rule**: CORS MUST use specific origins from environment variables — never wildcard `*`. The allowed origins list MUST include:
 - The Amplify app URL (constructed from `appId`)
@@ -113,7 +136,7 @@ Every Lambda response (including errors) MUST include CORS headers. CORS headers
 
 ---
 
-## Rule CIC-07: Structured Logging
+## Rule CIC-08: Structured Logging
 
 **Rule**: All Lambda functions MUST use structured JSON logging via the Python `logging` module. Raw `print()` statements are prohibited in production code. Logs MUST include action context and MUST NOT contain PII.
 
@@ -125,7 +148,7 @@ Every Lambda response (including errors) MUST include CORS headers. CORS headers
 
 ---
 
-## Rule CIC-08: Latest Stable Dependencies
+## Rule CIC-09: Latest Stable Dependencies
 
 **Rule**: All dependencies MUST use the latest stable versions at the time of implementation. Before writing any dependency file (`package.json`, `requirements.txt`), the agent MUST check current versions using available tools (npm view, Context7, PyPI search).
 
@@ -141,7 +164,7 @@ Version pinning strategy:
 
 ---
 
-## Rule CIC-09: API Contract Before Integration
+## Rule CIC-10: API Contract Before Integration
 
 **Rule**: API contracts (endpoints, request/response formats, authentication requirements) MUST be defined and approved before any frontend integration code is written. This is a dependency constraint, not an ordering constraint — once the API contract is established, backend and frontend implementation MAY proceed in parallel.
 
@@ -162,7 +185,7 @@ For units that contain both backend and frontend components, parallel execution 
 
 ---
 
-## Rule CIC-10: Lambda Consolidation
+## Rule CIC-11: Lambda Consolidation
 
 **Rule**: Lambda functions MUST be consolidated to minimize operational complexity. Aim for 2-3 Lambda functions maximum per project unless justified. Combine related operations into single functions with routing logic.
 
@@ -179,7 +202,7 @@ Only separate Lambdas when there are clear reasons:
 
 ---
 
-## Rule CIC-11: Data Store Security
+## Rule CIC-12: Data Store Security
 
 **Rule**: All data persistence stores MUST have:
 - Encryption at rest enabled
@@ -195,7 +218,7 @@ Only separate Lambdas when there are clear reasons:
 
 ---
 
-## Rule CIC-12: CDK Outputs and Documentation
+## Rule CIC-13: CDK Outputs and Documentation
 
 **Rule**: Every resource consumed by the frontend or other stacks MUST be exported via `CfnOutput`. All architectural decisions MUST be documented as ADRs in `docs/architectureDeepDive.md` and referenced in code comments where implemented.
 
