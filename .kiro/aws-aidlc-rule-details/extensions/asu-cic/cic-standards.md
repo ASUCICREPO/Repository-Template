@@ -237,6 +237,155 @@ NagSuppressions.addResourceSuppressions(resource, [{
 
 ---
 
+---
+
+## Rule CIC-14: TypeScript Strict Mode and Environment Variable Validation
+
+**Rule**: All frontend TypeScript code MUST use strict mode enabled in `tsconfig.json`. All environment variables accessed in frontend code MUST be validated at application startup with clear error messages if missing or invalid.
+
+**Verification**:
+- `tsconfig.json` has `"strict": true` enabled
+- All `process.env` or `import.meta.env` accesses are validated before use
+- Missing environment variables cause application startup failure with descriptive error messages
+- No runtime errors due to undefined environment variables
+
+---
+
+## Rule CIC-15: Session ID Requirements
+
+**Rule**: All chat or conversational interfaces MUST generate and maintain a unique session ID for each user session. The session ID MUST be included in all API requests to backend services for conversation continuity and logging correlation.
+
+**Verification**:
+- Session ID is generated on chat interface initialization (UUID or similar)
+- Session ID is persisted across page refreshes (localStorage or sessionStorage)
+- All chat API requests include the session ID in headers or request body
+- Backend logs include session ID for request correlation
+
+---
+
+## Rule CIC-16: AWS SDK Credential Management
+
+**Rule**: Frontend code using AWS SDK MUST use Cognito Identity Pool credentials. Direct AWS credentials (access keys, secret keys) MUST NEVER be embedded in frontend code or configuration files.
+
+**Verification**:
+- AWS SDK clients use `fromCognitoIdentityPool` credential provider
+- No hardcoded AWS credentials in frontend source code
+- Cognito Identity Pool ID is provided via environment variable
+- S3 uploads and other AWS service calls use temporary credentials from Cognito
+
+---
+
+## Rule CIC-17: Input Sanitization
+
+**Rule**: All user input MUST be sanitized before being sent to backend APIs or displayed in the UI. This includes text inputs, file uploads, and any user-provided data.
+
+**Verification**:
+- User text input is trimmed and validated before API calls
+- File uploads validate file type, size, and name before processing
+- User-provided data is escaped before rendering in HTML
+- No direct insertion of user input into SQL queries, shell commands, or HTML without sanitization
+
+---
+
+## Rule CIC-18: API Error Handling and Retry Logic
+
+**Rule**: All API calls from frontend MUST implement proper error handling with user-friendly error messages. For transient errors (network failures, 5xx responses), implement exponential backoff retry logic with a maximum retry limit.
+
+**Verification**:
+- All API calls are wrapped in try-catch blocks
+- Network errors display user-friendly messages (not raw error objects)
+- Transient errors (5xx, network timeout) trigger automatic retry with exponential backoff
+- Maximum retry limit is enforced (typically 3 attempts)
+- User is notified after max retries are exhausted
+
+---
+
+## Rule CIC-19: Bedrock Model Validation
+
+**Rule**: Before implementing ANY Bedrock integration, the agent MUST validate model availability in the target region by running `aws bedrock list-foundation-models` and `aws bedrock list-inference-profiles`. Prefer AWS-owned models (Nova, Titan) that don't require marketplace subscriptions.
+
+**Verification**:
+- Model availability validation is documented in design artifacts
+- Model selection rationale is documented (why this model was chosen)
+- If using third-party models (Claude, etc.), verification that they're enabled in the account is documented
+- IAM permissions match the model invocation method (foundation model ID vs inference profile ID)
+
+---
+
+## Rule CIC-20: Cross-Region Inference Profile IAM Permissions
+
+**Rule**: When using cross-region inference profiles (prefixed with `us.`, `eu.`, `ap.`), IAM policies MUST grant permissions for ALL regions in that geographic area, not just the deployment region.
+
+**Verification**:
+- IAM policies for cross-region profiles include ARNs for all possible routing regions
+- For `us.` profiles: us-east-1, us-east-2, us-west-2 are all included
+- For `eu.` profiles: all EU regions are included
+- For `ap.` profiles: all AP regions are included
+- Standard (non-prefixed) profiles only need permissions for their specific region
+
+---
+
+## Rule CIC-21: API Gateway Streaming Requirements
+
+**Rule**: When implementing response streaming with API Gateway REST API V1, Lambda functions MUST use the `awslambda.streamifyResponse` wrapper (Node.js only), write HTTP status and 8-byte padding before streaming content, and call `responseStream.end()` when done.
+
+**Verification**:
+- Streaming Lambda uses `awslambda.streamifyResponse` wrapper
+- Response includes HTTP status code and 8-byte padding before content
+- `responseStream.end()` is called in finally block
+- API Gateway integration uses `LambdaIntegration` with `proxy: true`
+- Bedrock streaming uses `InvokeModelWithResponseStreamCommand`
+
+---
+
+## Rule CIC-22: Lambda Consolidation
+
+**Rule**: Lambda functions MUST be consolidated to minimize operational complexity. Aim for 2-3 Lambda functions maximum per project unless justified. Combine related operations into single functions with routing logic. Only separate Lambdas when there are clear reasons: different execution requirements, different IAM permissions requiring security isolation, different scaling patterns, or different deployment lifecycles.
+
+**Verification**:
+- No more than 3 Lambda functions without a documented justification
+- Related CRUD operations are handled by a single Lambda with routing
+- Lambda separation decisions are documented as ADRs when exceeding 3 functions
+- Multi-endpoint Lambdas use path routing (switch/case on path)
+
+---
+
+## Rule CIC-23: Amplify SSR Configuration
+
+**Rule**: Amplify apps using Next.js SSR (WEB_COMPUTE platform) MUST NOT include SPA-style custom rewrite rules (catch-all → `/index.html`). Amplify's compute layer handles routing natively for SSR. For monorepo projects, `AMPLIFY_MONOREPO_APP_ROOT` MUST be set as an environment variable on both the app and branch.
+
+**Verification**:
+- No `customRules` property in Amplify app definition for WEB_COMPUTE platform
+- For monorepo projects: `AMPLIFY_MONOREPO_APP_ROOT` is set in app and branch environment variables
+- `buildSpec` includes `appRoot` matching the monorepo structure
+- Next.js version is 12-15 (Amplify Hosting compute supported range)
+
+---
+
+## Rule CIC-24: Amplify Auto-Build Trigger
+
+**Rule**: To ensure environment variable changes (API URLs, Cognito IDs) are picked up immediately after CDK deploy, use an `AwsCustomResource` that calls `amplify:StartJob` with `Date.now()` in the `PhysicalResourceId` to force execution on every deploy.
+
+**Verification**:
+- `AwsCustomResource` is defined with `onCreate` and `onUpdate` actions
+- Both actions call `amplify:StartJob` with `jobType: 'RELEASE'`
+- `PhysicalResourceId` includes `Date.now()` to force execution on every deploy
+- IAM policy grants `amplify:StartJob` permission for the app and branch
+
+---
+
+## Rule CIC-25: Security Scanning Integration
+
+**Rule**: All CIC projects MUST integrate cdk-nag security scanning in the CDK stack via `Aspects.of(this).add(new AwsSolutionsChecks({ verbose: true }))`. cdk-nag runs automatically on every `cdk synth` and `cdk deploy`. All findings MUST be either fixed or suppressed with an ADR-format reason.
+
+**Verification**:
+- `cdk-nag` is installed as a dependency in `backend/package.json`
+- `AwsSolutionsChecks` is added to the stack via `Aspects.of(this).add()`
+- All cdk-nag suppressions include a reason string with ADR reference or justification
+- No HIGH/CRITICAL findings are left unaddressed without documented risk acceptance
+
+---
+
 ## Enforcement Integration
 
 These rules are cross-cutting constraints that apply to every AI-DLC stage. At each stage:

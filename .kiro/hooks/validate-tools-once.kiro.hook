@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Validate MCP and Powers Configuration",
+  "description": "One-time validation that required external tools (Powers/MCP) are properly configured in .kiro/settings/mcp.json. Runs once on first prompt, then creates .kiro/.tools-validated marker to skip future checks.",
+  "version": "1",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Before proceeding, perform a ONE-TIME validation of MCP and Powers configuration:\n\n**Step 1: Check if validation already done**\n- Check if file `.kiro/.tools-validated` exists\n- If YES → Skip validation and proceed normally\n- If NO → Continue to Step 2\n\n**Step 2: Validate configuration**\n\n1. Read `.kiro/settings/mcp.json`\n2. Run `kiroPowers list`\n3. Validate required tools:\n\n**Required Powers:**\n- aws-infrastructure-as-code\n- aws-observability\n\n**Required MCP Servers (in mcp.json):**\n- aws-diagram\n- context7\n- aws-knowledge-mcp-server\n- awslabs.aws-iac-mcp-server\n- awslabs.cloudwatch-mcp-server\n- awslabs.aws-documentation-mcp-server\n\n**Validation Rules:**\n- Powers: Must appear in `kiroPowers list` output\n- MCP Servers: Must be in mcp.json with `disabled: false` (or disabled field not present)\n\n**AWS Configuration Check:**\n- Check if any `env` values in mcp.json contain `<YOUR_AWS_PROFILE>` or `<YOUR_AWS_REGION>`\n- If found → ⚠️ WARN: 'Replace placeholders in .kiro/settings/mcp.json with your AWS profile and region'\n- This is a WARNING only, not blocking\n\n4. Show validation results:\n   - ✅ for properly configured tools\n   - ❌ for missing/disabled tools\n   - ⚠️ for AWS placeholder warnings\n\n5. If ALL tools are ✅:\n   - Create `.kiro/.tools-validated` file (empty file as marker)\n   - Proceed with user's request\n   - Inform user: 'Configuration validated. This check will not run again.'\n\n6. If ANY tools are ❌:\n   - Show missing tools\n   - Provide installation instructions\n   - DO NOT create `.kiro/.tools-validated`\n   - Ask user to fix configuration before proceeding\n\n**After successful validation:** The `.kiro/.tools-validated` marker file prevents this check from running again. You can manually delete this file to re-run validation, or disable this hook entirely."
+  }
+}

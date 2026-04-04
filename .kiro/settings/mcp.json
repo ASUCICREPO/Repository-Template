@@ -1,0 +1,139 @@
+{
+  "mcpServers": {
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [],
+      "description": "Git operations: status, commit, branch, push, pull, diff, log"
+    },
+    "context7": {
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {},
+      "disabled": false,
+      "autoApprove": [],
+      "description": "Up-to-date, version-specific documentation for any library or framework"
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": [],
+      "description": "Fetch web content and convert to markdown for documentation access"
+    },
+    "aws-diagram": {
+      "command": "uvx",
+      "args": [
+        "awslabs.aws-diagram-mcp-server@latest"
+      ],
+      "env": {
+        "FASTMCP_LOG_LEVEL": "ERROR"
+      },
+      "disabled": false,
+      "autoApprove": [
+        "generate_diagram"
+      ]
+    }
+  },
+  "powers": {
+    "mcpServers": {
+      "power-aws-infrastructure-as-code-awslabs.aws-iac-mcp-server": {
+        "command": "uvx",
+        "args": [
+          "awslabs.aws-iac-mcp-server@latest"
+        ],
+        "env": {
+          "FASTMCP_LOG_LEVEL": "ERROR"
+        },
+        "disabled": false,
+        "autoApprove": [
+          "search_cdk_documentation",
+          "read_iac_documentation_page",
+          "search_cdk_samples_and_constructs",
+          "cdk_best_practices"
+        ]
+      },
+      "power-aws-observability-awslabs.cloudwatch-mcp-server": {
+        "command": "uvx",
+        "args": [
+          "awslabs.cloudwatch-mcp-server@latest"
+        ],
+        "env": {
+          "AWS_PROFILE": "<YOUR_AWS_PROFILE>",
+          "AWS_REGION": "<YOUR_AWS_REGION>",
+          "FASTMCP_LOG_LEVEL": "ERROR"
+        },
+        "disabled": false,
+        "autoApprove": [
+          "get_metric_metadata",
+          "get_recommended_metric_alarms",
+          "execute_log_insights_query",
+          "describe_log_groups"
+        ]
+      },
+      "power-aws-observability-awslabs.cloudwatch-applicationsignals-mcp-server": {
+        "command": "uvx",
+        "args": [
+          "awslabs.cloudwatch-applicationsignals-mcp-server@latest"
+        ],
+        "env": {
+          "AWS_PROFILE": "<YOUR_AWS_PROFILE>",
+          "AWS_REGION": "<YOUR_AWS_REGION>",
+          "FASTMCP_LOG_LEVEL": "ERROR"
+        },
+        "disabled": false
+      },
+      "power-aws-observability-awslabs.cloudtrail-mcp-server": {
+        "disabled": false,
+        "command": "uvx",
+        "args": [
+          "awslabs.cloudtrail-mcp-server@latest"
+        ],
+        "env": {
+          "AWS_PROFILE": "<YOUR_AWS_PROFILE>",
+          "AWS_REGION": "<YOUR_AWS_REGION>",
+          "FASTMCP_LOG_LEVEL": "ERROR"
+        },
+        "transportType": "stdio"
+      },
+      "power-aws-observability-awslabs.aws-documentation-mcp-server": {
+        "command": "uvx",
+        "args": [
+          "awslabs.aws-documentation-mcp-server@latest"
+        ],
+        "env": {
+          "FASTMCP_LOG_LEVEL": "ERROR"
+        },
+        "disabled": false,
+        "autoApprove": [
+          "search_documentation"
+        ]
+      },
+      "power-iam-policy-autopilot-power-iam-policy-autopilot-mcp": {
+        "command": "uvx",
+        "args": [
+          "iam-policy-autopilot@latest",
+          "mcp-server"
+        ],
+        "env": {},
+        "disabled": false
+      },
+      "aws-knowledge-mcp-server": {
+      "url": "https://knowledge-mcp.global.api.aws",
+      "type": "http",
+      "disabled": false
+    },
+    "power-figma-figma": {
+        "type": "http",
+        "url": "https://mcp.figma.com/mcp"
+      }
+    }
+  }
+}
