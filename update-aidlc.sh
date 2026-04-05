@@ -9,7 +9,7 @@ TMP_DIR=$(mktemp -d)
 ZIP_PATH="$TMP_DIR/aidlc-rules.zip"
 EXTRACT_DIR="$TMP_DIR/extract"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_ROOT="$SCRIPT_DIR"
 
 echo "Fetching latest release info..."
 ZIP_URL=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | python3 -c "import sys,json; print([a['browser_download_url'] for a in json.load(sys.stdin)['assets'] if 'ai-dlc-rules' in a['name']][0])")

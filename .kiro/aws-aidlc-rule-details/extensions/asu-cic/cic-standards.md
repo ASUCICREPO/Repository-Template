@@ -199,6 +199,7 @@ Only separate Lambdas when there are clear reasons:
 - No more than 3 Lambda functions without a documented justification
 - Related CRUD operations are handled by a single Lambda with routing
 - Lambda separation decisions are documented as ADRs when exceeding 3 functions
+- Multi-endpoint Lambdas use path routing (switch/case on path)
 
 ---
 
@@ -234,8 +235,6 @@ NagSuppressions.addResourceSuppressions(resource, [{
 - API URLs, Function URLs, bucket names, table names, and Amplify URLs are exported as CfnOutputs
 - Significant architectural choices have ADR entries
 - All cdk-nag suppressions include a reason string
-
----
 
 ---
 
@@ -335,18 +334,6 @@ NagSuppressions.addResourceSuppressions(resource, [{
 - `responseStream.end()` is called in finally block
 - API Gateway integration uses `LambdaIntegration` with `proxy: true`
 - Bedrock streaming uses `InvokeModelWithResponseStreamCommand`
-
----
-
-## Rule CIC-22: Lambda Consolidation
-
-**Rule**: Lambda functions MUST be consolidated to minimize operational complexity. Aim for 2-3 Lambda functions maximum per project unless justified. Combine related operations into single functions with routing logic. Only separate Lambdas when there are clear reasons: different execution requirements, different IAM permissions requiring security isolation, different scaling patterns, or different deployment lifecycles.
-
-**Verification**:
-- No more than 3 Lambda functions without a documented justification
-- Related CRUD operations are handled by a single Lambda with routing
-- Lambda separation decisions are documented as ADRs when exceeding 3 functions
-- Multi-endpoint Lambdas use path routing (switch/case on path)
 
 ---
 

@@ -69,12 +69,34 @@ For a detailed explanation of the architecture, see the [Architecture Deep Dive]
 
 ---
 
+## Prerequisites
+
+Before starting development or deployment, you MUST run the AI-DLC update script once to ensure you have the latest workflow rules:
+
+```bash
+./update-aidlc.sh
+```
+
+This script:
+- Downloads the latest AI-DLC workflow rules from the official repository
+- Updates core steering files and rule details
+- Preserves any custom extensions you've added
+- Should be run periodically to get the latest best practices and standards
+
+**What the script does:**
+- Fetches the latest release from `awslabs/aidlc-workflows`
+- Updates `.kiro/steering/aws-aidlc-rules/` (core workflow rules)
+- Updates `.kiro/aws-aidlc-rule-details/` (detailed implementation guides)
+- Preserves custom extensions in `aws-aidlc-rule-details/extensions/`
+
+---
+
 ## Deployment Guide
 
 For complete deployment instructions, see the [Deployment Guide](./docs/deploymentGuide.md).
 
 **Quick Start:**
-1. [INSERT_QUICK_START_STEP_1]
+1. Run `./update-aidlc.sh` to get the latest AI-DLC rules (first time only)
 2. [INSERT_QUICK_START_STEP_2]
 3. [INSERT_QUICK_START_STEP_3]
 

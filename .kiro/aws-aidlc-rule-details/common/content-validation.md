@@ -4,23 +4,19 @@
 
 **CRITICAL**: All generated content MUST be validated before writing to files to prevent parsing errors.
 
-## Architecture Diagram Standards
+## ASCII Diagram Standards
 
-**CRITICAL**: Before creating ANY file with architecture diagrams:
+**CRITICAL**: Before creating ANY file with ASCII diagrams:
 
-1. **LOAD** `common/architecture-diagram-standards.md`
-2. **USE** draw.io XML format (NOT Mermaid or ASCII)
-3. **VALIDATE** XML structure:
-   - Valid mxGraphModel root element
-   - Proper cell hierarchy
-   - Valid connection references
-4. **FOLLOW** CIC conventions:
-   - AWS 2024 icon shapes
-   - Consistent layer colors
-   - Security boundary labels
-   - Lambda consolidation principle (2-3 functions max)
+1. **LOAD** `common/ascii-diagram-standards.md`
+2. **VALIDATE** each diagram:
+   - Count characters per line (all lines MUST be same width)
+   - Use ONLY: `+` `-` `|` `^` `v` `<` `>` and spaces
+   - NO Unicode box-drawing characters
+   - Spaces only (NO tabs)
+3. **TEST** alignment by verifying box corners align vertically
 
-**See `common/architecture-diagram-standards.md` for complete standards and template.**
+**See `common/ascii-diagram-standards.md` for patterns and validation checklist.**
 
 ## Mermaid Diagram Validation
 
