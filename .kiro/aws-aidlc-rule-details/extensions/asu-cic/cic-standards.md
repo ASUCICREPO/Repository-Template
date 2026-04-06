@@ -122,17 +122,18 @@ Deviations require an ADR with justification.
 
 ## Rule CIC-07: CORS Configuration
 
-**Rule**: CORS MUST use specific origins from environment variables — never wildcard `*`. The allowed origins list MUST include:
-- The Amplify app URL (constructed from `appId`)
-- `http://localhost:3000` (for local development)
+**Rule**: CORS in Lambda code, NOT in Function URL config. Use specific origins from environment variables — never wildcard `*`. Include Amplify app URL and `http://localhost:3000`.
 
-Every Lambda response (including errors) MUST include CORS headers. CORS headers MUST be set in exactly ONE place — either the API Gateway/Function URL config OR the Lambda code, never both.
+**Implementation**:
+- ✅ Add CORS headers in Lambda response code (all responses including errors)
+- ❌ Do NOT add `cors` property to Function URL
+- Pass allowed origins via `ALLOWED_ORIGINS` environment variable
 
 **Verification**:
-- No CORS configuration uses `Access-Control-Allow-Origin: *`
-- Allowed origins are read from environment variables or constructed from CDK outputs
-- All Lambda responses include CORS headers
-- CORS headers are not duplicated between gateway config and Lambda code
+- No wildcard origins (`*`)
+- Function URL has NO `cors` property
+- Lambda code includes CORS headers in all responses
+- `ALLOWED_ORIGINS` environment variable is set
 
 ---
 
