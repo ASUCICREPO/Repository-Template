@@ -91,6 +91,87 @@ This script:
 
 ---
 
+## Adding Custom Rules to CIC Extensions (Optional)
+
+This project includes CIC-specific extension files for adding custom development rules. Add rules only if you want to enforce CIC specific standards.
+
+### Extension Files
+
+- **Rules file**: `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.md`
+- **Opt-in file**: `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.opt-in.md`
+
+### Adding Rules to cic-specifics.md
+
+Edit `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.md`:
+
+```markdown
+# CIC-Specific Development Rules
+
+## Overview
+These rules enforce CIC-specific development standards. They are blocking constraints that apply across all AI-DLC phases.
+
+---
+
+## Rule CIC-01: Resource Naming
+
+**Rule**: All AWS resources must follow pattern: `{env}-{app}-{resource}-{id}`
+
+**Verification**:
+- All resource names follow the pattern
+- Environment is one of: dev, staging, prod
+
+---
+
+## Rule CIC-02: Required Tags
+
+**Rule**: All resources must include tags: CostCenter, Owner, Environment
+
+**Verification**:
+- All resources have CostCenter tag
+- All resources have Owner tag
+- All resources have Environment tag
+```
+
+**Rule format:**
+- Each rule: `## Rule CIC-NN: Title` (use CIC prefix, number sequentially)
+- Include **Rule** section describing the requirement
+- Include **Verification** section with concrete checks
+
+### Adding Opt-in to cic-specifics.opt-in.md
+
+Edit `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.opt-in.md`:
+
+```markdown
+# CIC-Specific Rules — Opt-In
+
+**Extension**: CIC-Specific Development Standards
+
+## Opt-In Prompt
+
+\`\`\`markdown
+## Question: CIC Development Standards
+Should CIC-specific development standards be enforced?
+
+A) Yes — enforce CIC rules
+B) No — skip CIC rules
+
+[Answer]: 
+\`\`\`
+```
+
+**Opt-in format:**
+- Wrap question in markdown code block (triple backticks)
+- Provide A/B options
+- Include `[Answer]:` tag
+
+### Reference Examples
+
+See built-in security extension for complete examples:
+- `.kiro/aws-aidlc-rule-details/extensions/security/baseline/security-baseline.md`
+- `.kiro/aws-aidlc-rule-details/extensions/security/baseline/security-baseline.opt-in.md`
+
+---
+
 ## Deployment Guide
 
 For complete deployment instructions, see the [Deployment Guide](./docs/deploymentGuide.md).
