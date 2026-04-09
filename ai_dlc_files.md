@@ -1,8 +1,213 @@
-# AI-DLC Generated Files
+# AI-DLC Documentation
 
 ![AI-DLC Workflow](./ai-dlc.png)
 
-**Current Stage**: CONSTRUCTION PHASE - Build and Test (Completed)
+This document provides comprehensive information about using AI-DLC (AI Development Lifecycle) and the files it generates.
+
+---
+
+## Table of Contents
+
+- [What is AI-DLC?](#what-is-ai-dlc)
+- [Getting Started](#getting-started)
+- [Writing Effective Prompts](#writing-effective-prompts)
+- [How AI-DLC Works](#how-ai-dlc-works)
+- [Prerequisites](#prerequisites)
+- [Adding Custom Rules](#adding-custom-rules-to-cic-extensions-optional)
+- [Generated Files](#generated-files)
+
+---
+
+## What is AI-DLC?
+
+AI-DLC (AI Development Lifecycle) is a structured workflow that guides AI through requirements → design → implementation → testing. It ensures consistent, well-documented development with human oversight at each stage.
+
+---
+
+## Getting Started
+
+Start your request with `using AI-DLC:` to activate the workflow:
+
+```
+using AI-DLC: [your project description]
+```
+
+AI-DLC will guide you through planning, ask clarifying questions, generate documentation, and then build your application. You review and approve at each stage.
+
+---
+
+## Writing Effective Prompts
+
+### Prompt Structure
+
+```
+using AI-DLC: [Goal]. [Frontend]. [Backend]. [Core features]. [Out of scope]. [Technical constraints].
+```
+
+### What to Include
+
+- High-level goal and purpose
+- Frontend requirements (framework, key UI features)
+- Backend requirements (language, services, architecture)
+- Core features with specific details
+- What's explicitly out of scope
+- Technical constraints or preferences
+
+### Example - CIC Project (USDA Chatbot)
+
+Kindly review the project and spec files from Github and the CIC Google Drive for better context.
+
+```
+using AI-DLC: Build an AI-powered chatbot system for USDA public inquiries that scrapes 
+and indexes content from usda.gov and farmers.gov, then provides accurate, sourced responses 
+using Amazon Nova Pro model. 
+
+The application needs a NextJS frontend with a chat interface (text box for queries, streaming 
+responses, source citations, confidence levels, and feedback mechanism), a floating chat widget 
+for USDA website integration, and an admin dashboard for reviewing flagged responses. 
+
+Implement backend using Python Lambda functions (not too granular - group related functionality), 
+AWS CDK in TypeScript, and a RAG architecture with Amazon Bedrock Knowledge Base.
+
+Core features: web scraping pipeline with delta-based content refresh (daily checks, update only 
+modified content), confidence scoring with email capture for low-confidence responses, user 
+feedback mechanism with admin notifications, and proper source attribution. Target 90% accuracy 
+on USDA-provided sample Q&A test set.
+
+Out of scope for POC: audio/video parsing, live agent handoff, 508 compliance certification, 
+production deployment, multilingual support.
+```
+
+### Example - Simple Feature
+
+```
+using AI-DLC: Add Cognito authentication to my NextJS app. Users should sign up, sign in, 
+and access protected routes. Use email/password authentication with MFA optional.
+```
+
+### Example - Quick Fix
+
+```
+using AI-DLC: Fix the CORS error in my API Gateway configuration.
+```
+
+---
+
+## How AI-DLC Works
+
+1. **Answer Questions**: AI-DLC creates markdown files with multiple-choice questions. Fill in your answer after the `[Answer]:` tag.
+2. **Review Plans**: Check generated requirements, designs, and execution plans in the `aidlc-docs/` folder.
+3. **Approve Stages**: AI-DLC waits for your explicit approval before moving to the next stage.
+4. **Get Documentation**: All decisions, designs, and code plans are documented automatically.
+
+The workflow adapts to your request - simple fixes skip straight to code, complex projects get full planning.
+
+---
+
+## Prerequisites
+
+Before starting development or deployment, you MUST run the AI-DLC update script once to ensure you have the latest workflow rules:
+
+```bash
+./update-aidlc.sh
+```
+
+This script:
+- Downloads the latest AI-DLC workflow rules from the official repository
+- Updates core steering files and rule details
+- Preserves any custom extensions you've added
+- Should be run periodically to get the latest best practices and standards
+
+**What the script does:**
+- Fetches the latest release from `awslabs/aidlc-workflows`
+- Updates `.kiro/steering/aws-aidlc-rules/` (core workflow rules)
+- Updates `.kiro/aws-aidlc-rule-details/` (detailed implementation guides)
+- Preserves custom extensions in `aws-aidlc-rule-details/extensions/`
+
+---
+
+## Adding Custom Rules to CIC Extensions (Optional)
+
+This project includes CIC-specific extension files for adding custom development rules. Add rules only if you want to enforce CIC specific standards.
+
+### Extension Files
+
+- **Rules file**: `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.md`
+- **Opt-in file**: `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.opt-in.md`
+
+### Example: Adding Rules to cic-specifics.md
+
+Edit `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.md`:
+
+```markdown
+# CIC-Specific Development Rules
+
+## Overview
+These rules enforce CIC-specific development standards. They are blocking constraints that apply across all AI-DLC phases.
+
+---
+
+## Rule CIC-01: Resource Naming
+
+**Rule**: All AWS resources must follow pattern: `{env}-{app}-{resource}-{id}`
+
+**Verification**:
+- All resource names follow the pattern
+- Environment is one of: dev, staging, prod
+
+---
+
+## Rule CIC-02: Required Tags
+
+**Rule**: All resources must include tags: CostCenter, Owner, Environment
+
+**Verification**:
+- All resources have CostCenter tag
+- All resources have Owner tag
+- All resources have Environment tag
+```
+
+**Rule format:**
+- Each rule: `## Rule CIC-NN: Title` (use CIC prefix, number sequentially)
+- Include **Rule** section describing the requirement
+- Include **Verification** section with concrete checks
+
+### Adding Opt-in to cic-specifics.opt-in.md
+
+Edit `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.opt-in.md`:
+
+```markdown
+# CIC-Specific Rules — Opt-In
+
+**Extension**: CIC-Specific Development Standards
+
+## Opt-In Prompt
+
+\`\`\`markdown
+## Question: CIC Development Standards
+Should CIC-specific development standards be enforced?
+
+A) Yes — enforce CIC rules
+B) No — skip CIC rules
+
+[Answer]: 
+\`\`\`
+```
+
+**Opt-in format:**
+- Wrap question in markdown code block (triple backticks)
+- Provide A/B options
+- Include `[Answer]:` tag
+
+### Reference Examples
+
+See built-in security extension for complete examples:
+- `.kiro/aws-aidlc-rule-details/extensions/security/baseline/security-baseline.md`
+- `.kiro/aws-aidlc-rule-details/extensions/security/baseline/security-baseline.opt-in.md`
+
+---
+
+## Generated Files
 
 AI-DLC automatically generates documentation in `aidlc-docs/` as it progresses through the workflow. Below are the files created so far:
 
