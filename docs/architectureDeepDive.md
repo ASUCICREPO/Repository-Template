@@ -122,3 +122,77 @@ backend/
 - **Load Balancing**: [INSERT_LOAD_BALANCING_DETAILS]
 - **Caching**: [INSERT_CACHING_DETAILS]
 
+---
+
+## Architectural Decisions
+
+This section documents key architectural decisions made during the project's development. Each decision includes the context, alternatives considered, and rationale for the chosen approach.
+
+> **Note**: Use the [ADR Template](./ADR_TEMPLATE.md) when adding new decisions.
+
+### Decision 1: [INSERT_DECISION_TITLE]
+
+**Date**: [INSERT_DATE]  
+**Status**: Accepted | Superseded | Deprecated  
+**Deciders**: [INSERT_NAMES]
+
+**Context**:  
+[INSERT_CONTEXT - What problem were we trying to solve? What constraints existed?]
+
+**Decision**:  
+[INSERT_DECISION - What did we decide to do?]
+
+**Alternatives Considered**:
+1. **[INSERT_ALTERNATIVE_1]**: [INSERT_WHY_NOT_CHOSEN]
+2. **[INSERT_ALTERNATIVE_2]**: [INSERT_WHY_NOT_CHOSEN]
+3. **[INSERT_ALTERNATIVE_3]**: [INSERT_WHY_NOT_CHOSEN]
+
+**Rationale**:  
+[INSERT_RATIONALE - Why did we choose this approach? What were the key factors?]
+
+**Consequences**:
+- **Positive**: [INSERT_BENEFITS]
+- **Negative**: [INSERT_TRADEOFFS]
+- **Neutral**: [INSERT_NEUTRAL_IMPACTS]
+
+**Related Decisions**: [INSERT_LINKS_TO_RELATED_DECISIONS]
+
+---
+
+### Decision 2: [INSERT_DECISION_TITLE]
+
+[Repeat structure above for additional decisions]
+
+---
+
+### Example: Vector Search Implementation
+
+**Date**: 2024-01-15  
+**Status**: Accepted  
+**Deciders**: Jane Doe, John Smith
+
+**Context**:  
+The application requires semantic search capabilities over user-uploaded documents. We needed to choose a vector database solution that integrates well with AWS services, scales automatically, and minimizes operational overhead.
+
+**Decision**:  
+Use Amazon OpenSearch Serverless with vector search capabilities instead of S3 with vector embeddings stored separately.
+
+**Alternatives Considered**:
+1. **S3 + DynamoDB for vectors**: Store embeddings in DynamoDB, documents in S3. Rejected due to query complexity and lack of native vector search optimization.
+2. **Amazon Kendra**: Provides semantic search but higher cost for our use case and less control over embedding models.
+3. **Self-managed OpenSearch on EC2**: Full control but requires operational overhead (patching, scaling, monitoring).
+
+**Rationale**:  
+- OpenSearch Serverless provides native vector search with k-NN algorithms
+- Automatic scaling eliminates capacity planning
+- Integrated with Bedrock for embeddings
+- Pay-per-use pricing aligns with PoC/prototype nature
+- No infrastructure management required
+
+**Consequences**:
+- **Positive**: Zero operational overhead, automatic scaling, optimized vector search performance
+- **Negative**: Vendor lock-in to AWS, cold start latency for infrequent queries, limited customization vs self-managed
+- **Neutral**: Learning curve for OpenSearch query syntax
+
+**Related Decisions**: Decision 3 (Bedrock Model Selection)
+

@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "name": "Multi-Agent Orchestration Setup",
+  "description": "Guides you through building a Strands + AgentCore multi-agent feature following CIC standards.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "The user wants to build a multi-agent orchestration feature using Strands Agents SDK and AWS Bedrock AgentCore.\n\n## STEP 1: Load SDK Documentation\n\nActivate both powers and read only the core getting-started files:\n1. kiroPowers action='activate' powerName='strands'\n2. kiroPowers action='readSteering' powerName='strands' steeringFile='getting-started.md'\n3. kiroPowers action='activate' powerName='aws-agentcore'\n4. kiroPowers action='readSteering' powerName='aws-agentcore' steeringFile='getting-started.md'\n\nOnly read additional steering files if the user's feature requires them:\n- Memory (session history / user preferences): kiroPowers action='readSteering' powerName='aws-agentcore' steeringFile='agentcore-memory-integration.md'\n- External APIs via MCP: kiroPowers action='readSteering' powerName='aws-agentcore' steeringFile='agentcore-gateway-integration.md'\n\n## STEP 2: Understand the Feature\n\nAsk the user what they want to build if not already clear. Identify:\n- The domain (what problem does this agent solve?)\n- What specialist tasks are needed (these become sub-agents)\n- Whether memory or gateway integration is required\n\nThen scan the existing project: `backend/lib/`, `backend/lambda/`, any agent container directories, env var patterns.\n\n## STEP 3: Design and Scaffold\n\nPropose the agent structure, then implement it. Apply these CIC rules on top of the official SDK patterns:\n\n**Python**\n- All config via `os.getenv()` — no hardcoded IDs, ARNs, or credentials\n- `BedrockModel` uses cross-region inference profile: `global.*` or `us.*` (e.g. `global.anthropic.claude-sonnet-4-5-20250929-v1:0`)\n- Every `@tool` has type hints and an `Args:` docstring\n- `BedrockAgentCoreApp` + `@app.entrypoint` in the main file\n- Memory helpers return `[]` gracefully when env vars are unset\n- No PII in `print()` statements\n\n**CDK**\n- `ecrAssets.DockerImageAsset` for container build\n- AgentCore IAM role principal: `bedrock-agentcore.amazonaws.com`\n- Data service permissions via CDK grant methods or specific ARNs — never `Resource: '*'`\n- Lambda proxy: `InvokeMode.RESPONSE_STREAM`, CORS `allowedOrigins` references a variable not `'*'`\n- `CfnOutput` for Docker image URI\n- `.env` in `.gitignore`\n\n## STEP 4: Deployment Commands\n\n```\ncdk deploy\nagentcore configure --entrypoint <file>.py --image-uri <CDK output URI> --execution-role-arn <role ARN> --non-interactive\nagentcore launch\nagentcore status  # copy Runtime ARN → update AGENT_RUNTIME_ARN in CDK\nagentcore invoke '{\"prompt\": \"Hello\", \"session_id\": \"test123\"}'\n```"
+  },
+  "workspaceFolderName": "Repository-Template",
+  "shortName": "multi-agent-orchestration-setup"
+}

@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "name": "CIC Compliance Check",
+  "description": "Scans the backend and frontend against CIC standards. References steering files for requirements — no inline checklists.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "The user has triggered a CIC compliance check. Orchestrate a comprehensive audit using specialized subagents:\n\n## Step 1: Security Audit\nDelegate to cic-security subagent:\n'Perform a comprehensive CIC security compliance scan on backend/lib, backend/lambda, and frontend/app. Check against all security steering files:\n- #security-iam-secrets.md (IAM policies, secrets management, cdk-nag suppressions)\n- #security-data-encryption.md (S3, DynamoDB encryption, enforceSSL)\n- #security-code-dependencies.md (pinned deps, no hardcoded secrets, safe temp files)\n- #security-operations.md (error handling, logging, no PII in logs)\n- #security-compliance.md (SECURITY.md, threat model, license headers, tagging)\n\nProvide findings in priority order: CRITICAL → HIGH → MEDIUM → LOW'\n\n## Step 2: Backend Compliance\nDelegate to cic-backend subagent:\n'Review backend infrastructure against #backend-standards.md. Check:\n- Lambda definitions (architecture detection, runtime, timeout)\n- DynamoDB configuration (PAY_PER_REQUEST, encryption, PITR)\n- S3 bucket configuration\n- API Gateway setup\n- CDK best practices (grant methods, env vars, CfnOutputs)'\n\n## Step 3: Frontend Compliance\nDelegate to cic-frontend subagent:\n'Review frontend code against frontend steering files. Check:\n- Next.js App Router patterns\n- Component structure and organization\n- API integration patterns\n- Error handling and loading states\n- Accessibility compliance'\n\n## Step 4: Consolidate Results\nAfter all subagents complete:\n1. Create a summary table with PASS/FAIL/WARNING per category\n2. Consolidate all findings into a prioritized fix list\n3. Provide specific code snippets for each FAIL\n4. Ask user if they want to apply fixes (delegate to appropriate subagent)"
+  },
+  "workspaceFolderName": "Repository-Template",
+  "shortName": "chatbot-cic-compliance-check"
+}

@@ -4,6 +4,10 @@
 
 ---
 
+> **🚀 New to this template?** Start with the [GETTING_STARTED.md](./GETTING_STARTED.md) guide for setup instructions and best practices.
+
+---
+
 ## Disclaimers
 
 Customers are responsible for making their own independent assessment of the information in this document. This document:
@@ -40,12 +44,15 @@ All work produced is open source. More information can be found in the GitHub re
 
 | Index                                               | Description                                              |
 | :-------------------------------------------------- | :------------------------------------------------------- |
+| [**Getting Started Guide**](./GETTING_STARTED.md)  | **Setup instructions and best practices for this template** |
 | [High Level Architecture](#high-level-architecture) | High level overview illustrating component interactions  |
 | [Deployment Guide](#deployment-guide)               | How to deploy the project                                |
 | [User Guide](#user-guide)                           | End-user instructions and walkthrough                    |
 | [API Documentation](#api-documentation)             | Documentation on the APIs the project uses               |
 | [Directories](#directories)                         | General project directory structure                      |
 | [Modification Guide](#modification-guide)           | Guide for developers extending the project               |
+| [Troubleshooting](#troubleshooting)                 | Common issues and solutions                              |
+| [Removing Commit History](#removing-commit-history) | Steps to clean commit history when using as a template   |
 | [Credits](#credits)                                 | Contributors and acknowledgments                         |
 | [License](#license)                                 | License information                                      |
 
@@ -65,7 +72,7 @@ All work produced is open source. More information can be found in the GitHub re
 > 
 > Save the diagram as `docs/media/architecture.png` (or .jpeg/.jpg)
 
-For a detailed explanation of the architecture, see the [Architecture Deep Dive](./docs/architectureDeepDive.md).
+For a detailed explanation of the architecture and architectural decisions, see the [Architecture Deep Dive](./docs/architectureDeepDive.md).
 
 ---
 
@@ -170,6 +177,107 @@ For developers looking to extend or modify this project, see the [Modification G
 
 ---
 
+## Troubleshooting
+
+### MCP Servers Not Connecting
+
+**Issue**: MCP servers show "Disconnected" status in Kiro
+
+**Solutions**:
+1. Verify `uv` and `uvx` are installed: `uvx --version`
+2. Check AWS credentials: `aws sts get-caller-identity`
+3. Update AWS profile in `.kiro/settings/mcp.json`
+4. Restart Kiro or reconnect servers from MCP Server view
+
+### Spec Generation Fails
+
+**Issue**: Kiro fails to create specification documents
+
+**Solutions**:
+1. Ensure you're in **Autopilot mode** (required for subagent delegation)
+2. Verify scope documents are readable and well-formatted
+3. Check that `.kiro/agents/cic-project-specs.md` exists
+4. Try with a simpler project description first
+
+### Subagent Not Delegating
+
+**Issue**: Kiro implements code directly instead of delegating to subagents
+
+**Solutions**:
+1. Confirm you're in **Autopilot mode**
+2. Use clear domain keywords (backend, frontend, deploy, security)
+3. Explicitly request: "Use cic-backend agent to implement this"
+4. Check `.kiro/steering/main-agent-orchestration.md` is present
+
+### CDK Deployment Fails
+
+**Issue**: `cdk deploy` fails with errors
+
+**Solutions**:
+1. Run `cdk synth` first to check for issues
+2. Verify AWS credentials: `aws sts get-caller-identity`
+3. Check cdk-nag findings and address or suppress them
+4. Ensure CDK is bootstrapped: `cdk bootstrap`
+5. Review CloudFormation events in AWS Console
+
+### Amplify Build Fails
+
+**Issue**: Amplify build fails after deployment
+
+**Solutions**:
+1. Check `AMPLIFY_MONOREPO_APP_ROOT` is set to `frontend`
+2. Verify `buildSpec` in CDK matches your project structure
+3. Check Amplify build logs in AWS Console
+4. Ensure Next.js version is 12-15 (not 16+)
+5. Verify environment variables are set on the branch
+
+### Frontend Can't Connect to Backend
+
+**Issue**: Frontend shows CORS errors or can't reach API
+
+**Solutions**:
+1. Verify API URL in frontend environment variables
+2. Check CORS configuration in Lambda Function URL or API Gateway
+3. Ensure Amplify app URL is in backend CORS allowed origins
+4. Test API endpoint directly with curl or Postman
+
+### Security Scan Failures
+
+**Issue**: cdk-nag or security scans report violations
+
+**Solutions**:
+1. Review findings and fix resource configurations
+2. Add suppressions with ADR-format reasons if intentional
+3. Consult `.kiro/steering/security/` files for guidance
+4. Use `cic-security` agent to review and fix issues
+
+### Need More Help?
+
+- **Kiro Documentation**: Check `.kiro/README.md` for MCP and Power setup
+- **Steering Files**: Review `.kiro/steering/` for domain-specific guidance
+- **AWS Documentation**: Use AWS documentation MCP server for latest info
+- **GitHub Issues**: File issues in this repository for template problems
+
+---
+
+## Removing Commit History
+
+When using this as a template for a new repo, you can strip the entire commit history to start fresh with a single initial commit:
+
+```bash
+git checkout --orphan fresh-start
+git add -A
+git commit -m "Initial commit"
+git remote add new-origin https://github.com/REPO_OWNER/REPO_NAME.git
+git branch -D main
+git branch -m main
+git push origin main --force
+```
+
+> **Warning:** `--force` rewrites the remote branch history. Only do this on a repo you own and before collaborators have cloned it.
+
+---
+
 ## Credits
 
 This application was developed by:
@@ -185,5 +293,3 @@ This application was developed by:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
-
-

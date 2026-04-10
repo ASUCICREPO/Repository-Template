@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Spec Document Sync Validator",
+  "description": "Automatically validates and syncs spec documents (requirements.md, design.md, tasks.md) when any is edited to maintain consistency",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [".kiro/specs/**/requirements.md", ".kiro/specs/**/design.md", ".kiro/specs/**/tasks.md"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A spec document was just edited. You MUST verify document consistency:\n\n1. Read ALL three spec documents in this feature directory (requirements.md, design.md, tasks.md)\n2. Analyze the recent change and identify inconsistencies:\n   - Does design.md still align with requirements.md?\n   - Do tasks.md still implement the design.md architecture?\n   - Are there references to components/requirements that don't exist in other docs?\n3. If inconsistencies found:\n   - Update affected documents to restore consistency\n   - Report what you changed and why\n4. If all documents are consistent:\n   - Report: 'All spec documents are consistent. No sync needed.'\n\nDo NOT skip this validation. Document consistency is critical for project success."
+  }
+}

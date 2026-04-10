@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Validate Tools Before First Spec Creation",
+  "description": "One-time automatic validation that required external tools (Powers/MCP) are installed before creating spec docs for the first time",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": [
+      ".*invokeSubAgent.*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are about to invoke a subagent. Check if this is the FIRST TIME creating spec docs:\n\n**Step 1: Check if this is first spec creation**\n- Is the subagent 'cic-project-specs'?\n- Does .kiro/specs/ directory exist and is it empty or has no completed specs?\n- If NO to either → Skip validation and proceed with subagent invocation\n- If YES to both → Continue to Step 2\n\n**Step 2: One-time tool validation for cic-project-specs**\n\n1. Read .kiro/settings/mcp.json (and ~/.kiro/settings/mcp.json if exists)\n2. Run kiroPowers list\n3. Validate each required tool:\n\n**Required Powers:**\n- aws-infrastructure-as-code\n- figma (optional, only if design work needed)\n\n**Required MCP Servers:**\n- aws-diagram\n- context7 (or Context7)\n- aws-knowledge-mcp-server\n- power-figma-figma (Figma MCP server)\n\n**AWS Configuration Check:**\n- In .kiro/settings/mcp.json, check if any `env` values still contain placeholder strings `<YOUR_AWS_PROFILE>` or `<YOUR_AWS_REGION>`\n- These appear in the CloudWatch, CloudWatch Application Signals, and CloudTrail server configs\n- If placeholders found → ⚠️ WARN the user: 'AWS MCP servers have unconfigured placeholders. Replace <YOUR_AWS_PROFILE> and <YOUR_AWS_REGION> in .kiro/settings/mcp.json with your AWS profile name and region before using observability tools. See .kiro/README.md for details.'\n- This is a WARNING, not a blocker — spec creation can proceed without observability tools\n\n**CRITICAL VALIDATION RULES:**\n- **Powers:** Must appear in kiroPowers list output (name field)\n  - Example: 'aws-infrastructure-as-code' must be in the Powers list\n  - Config presence is NOT sufficient - must be in kiroPowers list\n- **MCP Servers:** Must appear in mcp.json under either 'mcpServers' or 'powers.mcpServers' with disabled: false\n  - Example: 'aws-diagram' must be in one of those sections AND not disabled\n  - Check both workspace and user-level configs\n- **DO NOT CONFUSE:** Figma MCP server ≠ Figma Power\n  - The Figma MCP server is configured as 'power-figma-figma' in mcp.json\n  - The Figma Power appears as 'figma' in kiroPowers list output\n  - If 'power-figma-figma' is in mcp.json but 'figma' is NOT in kiroPowers list → Figma Power is MISSING\n\n4. Show validation checklist:\n   - ✅ for tools that pass validation (Powers in list, MCP in config and enabled)\n   - ❌ for missing tools (Powers not in list, MCP not in config or disabled)\n   - ⚠️ for AWS placeholder warnings (not blocking)\n   - If ANY ❌ → STOP and help user install/fix before proceeding\n   - If ALL ✅ (with or without ⚠️) → Proceed with subagent invocation\n\n**After first successful validation:** This hook will continue to trigger but will skip validation for subsequent spec creations or other subagents. You can disable this hook after your first spec is created."
+  },
+  "workspaceFolderName": "Repository-Template",
+  "shortName": "validate-tools-before-delegation"
+}
