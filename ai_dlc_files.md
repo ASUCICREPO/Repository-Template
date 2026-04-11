@@ -27,6 +27,8 @@ AI-DLC (AI Development Lifecycle) is a structured workflow that guides AI throug
 
 ## Getting Started
 
+**IMPORTANT: Always use Vibe mode in Kiro when working with AI-DLC.**
+
 Start your request with `using AI-DLC:` to activate the workflow:
 
 ```
@@ -34,6 +36,16 @@ using AI-DLC: [your project description]
 ```
 
 AI-DLC will guide you through planning, ask clarifying questions, generate documentation, and then build your application. You review and approve at each stage.
+
+### Why Vibe Mode?
+
+Vibe mode in Kiro provides the optimal environment for AI-DLC workflows:
+- Enables subagent delegation for specialized tasks (backend, frontend, security, deployment)
+- Allows autonomous execution of multi-step workflows
+- Provides better context management for complex projects
+- Supports the full AI-DLC lifecycle without interruptions
+
+**To activate Vibe mode**: Look for the mode selector in Kiro's interface and ensure "Vibe" is selected before starting your AI-DLC request.
 
 ---
 
