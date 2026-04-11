@@ -15,6 +15,7 @@ This document provides comprehensive information about using AI-DLC (AI Developm
 - [Prerequisites](#prerequisites)
 - [Adding Custom Rules](#adding-custom-rules-to-cic-extensions-optional)
 - [Generated Files](#generated-files)
+- [Team Collaboration](#team-collaboration)
 
 ---
 
@@ -101,6 +102,12 @@ using AI-DLC: Fix the CORS error in my API Gateway configuration.
 4. **Get Documentation**: All decisions, designs, and code plans are documented automatically.
 
 The workflow adapts to your request - simple fixes skip straight to code, complex projects get full planning.
+
+---
+
+## Team Collaboration
+
+For detailed guidance on how teams can work together using AI-DLC, including workflows for UI/UX designers, backend developers, frontend developers, and best practices for handoffs and coordination, see the [Team Collaboration Guide](./ai_dlc_team_collaboration.md).
 
 ---
 
