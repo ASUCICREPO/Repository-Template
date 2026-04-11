@@ -76,6 +76,26 @@ For a detailed explanation of the architecture and architectural decisions, see 
 
 ---
 
+## AI-DLC Development Workflow
+
+This project was built using **AI-DLC (AI Development Lifecycle)**, a structured workflow that guides AI through requirements → design → implementation → testing.
+
+**For developers working on this project:**
+- See [AI-DLC Documentation](./ai_dlc_files.md) for complete details on:
+  - How to use AI-DLC for new features
+  - Writing effective prompts
+  - Understanding generated documentation in `aidlc-docs/`
+  - Adding custom development rules
+
+**Quick Start:**
+```
+using AI-DLC: [describe your feature or change]
+```
+
+> **Note**: Remove this section before production deployment.
+
+---
+
 ## Deployment Guide
 
 For complete deployment instructions, see the [Deployment Guide](./docs/deploymentGuide.md).
