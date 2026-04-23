@@ -8,14 +8,32 @@
       ],
       "env": {},
       "disabled": false,
-      "autoApprove": [],
+      "autoApprove": [
+        "get_file_contents",
+        "list_commits",
+        "get_issue",
+        "list_issues",
+        "get_pull_request",
+        "list_pull_requests",
+        "get_pull_request_files",
+        "get_pull_request_status",
+        "get_pull_request_comments",
+        "get_pull_request_reviews",
+        "search_repositories",
+        "search_code",
+        "search_issues",
+        "search_users"
+      ],
       "description": "Git operations: status, commit, branch, push, pull, diff, log"
     },
     "context7": {
       "url": "https://mcp.context7.com/mcp",
       "headers": {},
       "disabled": false,
-      "autoApprove": [],
+      "autoApprove": [
+        "resolve-library-id",
+        "get-library-docs"
+      ],
       "description": "Up-to-date, version-specific documentation for any library or framework"
     },
     "fetch": {
@@ -26,10 +44,6 @@
       "env": {},
       "disabled": false,
       "autoApprove": [
-        "fetch",
-        "fetch",
-        "fetch",
-        "fetch",
         "fetch"
       ],
       "description": "Fetch web content and convert to markdown for documentation access"
@@ -44,13 +58,23 @@
       },
       "disabled": false,
       "autoApprove": [
-        "generate_diagram"
+        "generate_diagram",
+        "get_diagram_examples",
+        "list_icons"
       ]
     },
     "aws-knowledge-mcp-server": {
       "url": "https://knowledge-mcp.global.api.aws",
       "type": "http",
       "disabled": false,
+      "autoApprove": [
+        "search_documentation",
+        "read_documentation",
+        "recommend",
+        "get_regional_availability",
+        "list_regions",
+        "retrieve_agent_sop"
+      ],
       "description": "AWS blogs, latest updates, service announcements"
     }
   }
