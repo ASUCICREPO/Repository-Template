@@ -190,11 +190,10 @@ export default nextConfig;
 
 **Code comments**: Document API integration patterns, state management flows, streaming implementations, business logic
 
-**Architectural decisions**: Document significant frontend architecture choices (state management approach, routing strategy, API integration pattern) in `docs/architectureDeepDive.md`. Reference decisions in code comments.
+**Architectural decisions**: Document significant frontend architecture choices (state management approach, routing strategy, API integration pattern) in the relevant AI-DLC design artifacts during Inception/Construction. Reference decisions in code comments.
 
 ```typescript
-// ADR: Using Context API instead of Redux
-// Decision Date: 2024-01-20
+// Decision: Using Context API instead of Redux
 // Rationale: Simpler for chat state, no external dependencies, sufficient for our use case
 // Alternative: Redux (rejected - overkill for single-page chat interface)
 export const ChatContext = createContext<ChatContextType | undefined>(undefined);

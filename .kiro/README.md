@@ -15,23 +15,14 @@ This project includes pre-configured MCP servers that require the following tool
 
 ### AWS Configuration (for AWS Powers)
 If you plan to use AWS-related Powers (CloudWatch, CloudTrail, IAM Policy Autopilot):
-1. Configure AWS credentials using AWS CLI or environment variables
-2. Replace `<YOUR_AWS_PROFILE>` in `.kiro/settings/mcp.json` with your AWS profile name (e.g., `default`, `my-project-admin`)
-3. Replace `<YOUR_AWS_REGION>` with your target region (e.g., `us-east-1`, `us-west-2`)
+1. Install the Powers via the Kiro Powers panel (`kiroPowers configure`)
+2. Configure AWS credentials using AWS CLI or environment variables
+3. When prompted by Power configuration, provide your AWS profile name and region
 
-These placeholders appear in the CloudWatch, CloudWatch Application Signals, and CloudTrail server configs. All three must be updated before those servers will connect.
+AWS Powers are NOT pre-configured in `mcp.json` — they're managed through the Powers panel. See `.kiro/steering/cic-tool-use-standards.md` for the full tiered tool strategy.
 
-**Example:**
-```json
-{
-  "power-aws-observability-awslabs.cloudwatch-mcp-server": {
-    "env": {
-      "AWS_PROFILE": "my-project-admin",
-      "AWS_REGION": "us-west-2"
-    }
-  }
-}
-```
+### AI-DLC Power
+The AI-DLC methodology Power is pre-installed at `.kiro/powers/ai-dlc-methodology/`. No additional setup needed. To update, pull the latest from https://github.com/aws-samples/sample-aidlc-kiro-power and replace the contents of that directory.
 
 ## Recommended MCP Setup
 

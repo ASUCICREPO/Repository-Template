@@ -51,7 +51,7 @@ import { NagSuppressions } from 'cdk-nag';
 NagSuppressions.addResourceSuppressions(resource, [
   {
     id: 'AwsSolutions-IAM4',
-    reason: 'AWS managed policy required for CloudWatch Logs. See ADR in architectureDeepDive.md',
+    reason: 'AWS managed policy required for CloudWatch Logs — standard Lambda execution pattern',
   },
 ]);
 ```

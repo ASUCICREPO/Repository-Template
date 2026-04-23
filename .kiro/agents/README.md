@@ -18,7 +18,7 @@ Specialized AI agents for CIC project development.
 ## Key Rules (All Agents)
 
 - No summary/checklist/deployment markdown files — only real code and existing docs
-- Minimal ADR comments — one line, only for non-obvious decisions
+- Minimal decision comments — one line, only for non-obvious decisions
 - Scope discipline — implement only what's asked, nothing more
 
 ## Workflow Patterns

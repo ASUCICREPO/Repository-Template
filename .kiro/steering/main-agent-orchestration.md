@@ -38,7 +38,7 @@ When you see ANY of these keywords in a user request, you MUST delegate to the c
 
 > **Keyword Precedence (highest to lowest):** Deployment > Security > Backend > Frontend > Documentation. When a request matches multiple keyword lists, delegate to the highest-priority matching agent. For example, "deploy the Lambda function" matches both Backend and Deployment — delegate to `cic-deployment`.
 
-> **AI-DLC Workflow:** When the user says "using AI-DLC" or asks to start a new project from specs/scope, follow the AI-DLC Integration section below instead of keyword-triggered delegation. AI-DLC handles the Inception phase (requirements, design, planning). Subagent delegation happens during the Construction phase.
+> **AI-DLC vs Direct Delegation:** Keyword-triggered delegation is for changes to EXISTING code. For NEW projects or features, AI-DLC handles the planning and design phases first, then delegates to subagents during Construction. See the AI-DLC Integration section below.
 
 ### Rule 2: Multi-File Implementation
 
@@ -75,7 +75,11 @@ You should ONLY work directly (not delegate) when:
 ```
 User request received
     ↓
-Step 1: Does it contain domain keywords?
+Step 1: Is this a new project/feature to build or plan?
+    ↓ YES → Use AI-DLC workflow (Inception → Construction → Operations)
+    ↓ NO
+    ↓
+Step 2: Does it contain domain keywords for existing code?
     ↓ YES
     ↓ → Check Powers/MCP if needed (1 call)
     ↓ → Read context files if needed (1-2 calls)
@@ -83,11 +87,7 @@ Step 1: Does it contain domain keywords?
     ↓
     ↓ NO
     ↓
-Step 2: Is it asking to CREATE/BUILD something?
-    ↓ YES → DELEGATE TO SUBAGENT
-    ↓ NO
-    ↓
-Step 3: Is it multi-file work?
+Step 3: Is it asking to modify/fix existing code?
     ↓ YES → DELEGATE TO SUBAGENT
     ↓ NO
     ↓
@@ -242,10 +242,20 @@ The AI-DLC Power (`.kiro/powers/ai-dlc-methodology/`) provides the development w
 
 ### When AI-DLC Activates
 
-AI-DLC activates when:
-- User says "using AI-DLC: ..." or "using AI-DLC, ..."
-- User asks to start a new project from a scope document or description
-- User asks to create specs, requirements, or designs for a new feature
+**AI-DLC is the DEFAULT workflow for any project or feature creation.** It activates when:
+- User describes a new project or feature to build (e.g., "build me a chatbot", "create a document upload system")
+- User provides a scope document, requirements, or project description
+- User asks to create specs, requirements, designs, or architecture
+- User explicitly says "using AI-DLC"
+- User asks to start, plan, or design something new
+
+**AI-DLC does NOT activate for:**
+- Direct implementation requests on existing code (e.g., "fix this bug", "add CORS headers")
+- Single-file edits or quick changes
+- Questions, queries, or information requests
+- Deployment, debugging, or security scanning
+
+When in doubt: if the request involves planning, designing, or building something new from scratch, use AI-DLC. If it's modifying existing code or a targeted fix, delegate directly to the appropriate subagent.
 
 ### Main Agent's Role in AI-DLC
 

@@ -280,7 +280,7 @@ const amplifyMainBranch = new amplify.CfnBranch(this, 'AmplifyMainBranch', {
   ],
 });
 
-// ADR: AwsCustomResource to trigger Amplify build on every CDK deploy
+// Decision: AwsCustomResource to trigger Amplify build on every CDK deploy
 // Rationale: enableAutoBuild only fires on git pushes, not CDK deploys.
 //   Environment variable changes (API URLs, Cognito IDs) require a rebuild.
 // Alternative: Manual `aws amplify start-job` after deploy (rejected - error-prone)
@@ -348,7 +348,7 @@ BEFORE writing ANY Bedrock code, validate model availability:
 2. Run `aws bedrock list-inference-profiles --region <region>`
 3. Prefer AWS-owned models (Nova, Titan) that don't require marketplace subscriptions
 4. If using third-party models (Claude, etc.), verify they're enabled in the account
-5. Document model selection rationale in ADR
+5. Document model selection rationale in the relevant AI-DLC design artifact
 
 **Model Selection Priority:**
 1. AWS Nova models (no marketplace subscription needed)
@@ -368,25 +368,26 @@ For detailed security guidance beyond the summary above, consult these manual-in
 
 cdk-nag is integrated directly in `backend/lib/backend-stack.ts` via `Aspects.of(this).add(new AwsSolutionsChecks({ verbose: true }))`. It runs automatically on every `cdk synth` and `cdk deploy` — no extra setup needed.
 
-When findings appear, either fix the resource config or suppress with an ADR-format reason using `NagSuppressions.addResourceSuppressions()`. See `backend-stack.ts` for the pattern.
+When findings appear, either fix the resource config or suppress with a clear reason string using `NagSuppressions.addResourceSuppressions()`. See `backend-stack.ts` for the pattern.
 
 ## Documenting Architectural Decisions
 
-When making significant architectural choices in CDK/Lambda code, document the decision:
+## Documenting Architectural Decisions
 
-**In architectureDeepDive.md**: Add formal ADR entry with context, alternatives, rationale, consequences.
+When making significant architectural choices in CDK/Lambda code:
 
-**In code comments**: Reference the decision where implemented.
+**During AI-DLC workflow**: Decisions are captured in the relevant design artifacts (`tech-stack-decisions.md`, `infrastructure-design.md`, `functional-design.md`) and logged in `aidlc-docs/audit.md`. The `cic-documentation` agent synthesizes these into `docs/architectureDeepDive.md` at project closure.
+
+**In code comments**: Reference the decision where implemented. Keep to one line when possible.
 
 ```typescript
-// ADR: Lambda architecture detection for ARM64/x86_64 compatibility
+// Decision: Lambda architecture detection for ARM64/x86_64 compatibility
 // Rationale: Supports development on both Apple Silicon and Intel Macs
-// Alternative: Hardcode ARM64 (rejected - breaks Intel Mac developers)
 const hostArch = os.arch();
 const lambdaArch = hostArch === "arm64" ? lambda.Architecture.ARM_64 : lambda.Architecture.X86_64;
 ```
 
-**Document decisions about**: Service selection (OpenSearch vs S3+DynamoDB), model choices (Bedrock model selection), architecture patterns (event-driven vs request-response), data storage (DynamoDB vs RDS), scaling strategies (serverless vs provisioned).
+**Document decisions about**: Service selection, model choices (Bedrock), architecture patterns, data storage, scaling strategies.
 
 
 ## Architecture Diagrams

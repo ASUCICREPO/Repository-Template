@@ -191,12 +191,12 @@ For developers looking to extend or modify this project, see the [Modification G
 
 ### Spec Generation Fails
 
-**Issue**: Kiro fails to create specification documents
+**Issue**: AI-DLC workflow fails to start or create documentation
 
 **Solutions**:
 1. Ensure you're in **Autopilot mode** (required for subagent delegation)
-2. Verify scope documents are readable and well-formatted
-3. Check that `.kiro/agents/cic-project-specs.md` exists
+2. Verify the AI-DLC Power is installed: check `.kiro/powers/ai-dlc-methodology/POWER.md` exists
+3. Start your request with "using AI-DLC: ..." to activate the workflow
 4. Try with a simpler project description first
 
 ### Subagent Not Delegating

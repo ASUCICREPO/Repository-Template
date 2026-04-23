@@ -61,7 +61,7 @@ Architecture sections in design.md must use this structure:
 - ❌ Separate Lambda for each API endpoint when they have similar logic
 - ❌ 5 Lambdas when 2-3 would suffice
 
-**Document the decision**: If you choose to separate Lambdas, add an ADR explaining why consolidation wasn't appropriate.
+**Document the decision**: If you choose to separate Lambdas, document the justification in the relevant AI-DLC design artifact.
 
 ### Generating PNG from Architecture
 
