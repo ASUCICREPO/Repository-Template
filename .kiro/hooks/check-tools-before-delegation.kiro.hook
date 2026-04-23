@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Check Tools Before Delegation",
+  "description": "Lightweight check that Tier 1 MCP servers and AI-DLC Power exist before delegating to subagents.",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": [
+      ".*invokeSubAgent.*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are about to invoke a subagent. Perform a quick tool check:\n\n1. Read `.kiro/settings/mcp.json`\n2. Verify these Tier 1 MCP servers exist and are enabled (search by substring in key names):\n   - git, context7, fetch, aws-diagram, aws-knowledge\n3. Check that `.kiro/powers/ai-dlc-methodology/POWER.md` exists\n\n**BLOCKING RULES:**\n- If AI-DLC Power is missing → STOP. Do NOT proceed with subagent invocation. Tell the user: 'The AI-DLC Power is required but not installed. Clone https://github.com/aws-samples/sample-aidlc-kiro-power and copy powers/ai-dlc-methodology/ to .kiro/powers/ai-dlc-methodology/, then restart Kiro.'\n- If ANY Tier 1 MCP server is missing → STOP. Do NOT proceed. Tell the user which server is missing and provide the exact JSON entry to add to .kiro/settings/mcp.json. Suggest running the Validate CIC Tools hook for full diagnostics.\n\n**If ALL present → Proceed with subagent invocation silently (no report needed).**"
+  }
+}

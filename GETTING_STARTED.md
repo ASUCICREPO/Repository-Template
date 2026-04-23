@@ -22,32 +22,28 @@ Alternate: Open Kiro and click on "Clone Repository" and paste this link: https:
 
 Review the [.kiro/README.md](./.kiro/README.md) for detailed MCP setup instructions.
 
-### 3. Create project specifications
+### 3. Start your project with AI-DLC
 
-**In Vibe mode**, either copy-paste your project specification or "two-pager" document into Kiro chat, OR add the scope document directly as a file/folder to the workspace.
+**In Vibe mode**, describe your project or paste your scope document into Kiro chat. Start with:
 
-Then prompt Kiro:
 ```
-Given the scope document, let's create spec documents for this project
-```
-
-**Note**: If prompted to use Spec mode, decline and continue in Vibe mode.
-
-### 4. Review specifications
-
-Wait for the flow to create each spec document. Review them as they're created and confirm to move to the next:
-- **requirements.md** → Review → Confirm
-- **design.md** → Review → Confirm  
-- **tasks.md** → Review → Ready to implement
-
-### 5. Implement tasks
-
-Once you've confirmed all spec documents including tasks.md, prompt Kiro to start executing:
-```
-Start implementing the tasks using the relevant subagents
+using AI-DLC: [your project description]
 ```
 
-Kiro will automatically delegate to specialized subagents (backend, frontend, security, documentation). The agent will notify you when all tasks are complete.
+AI-DLC will guide you through an adaptive workflow — gathering requirements, asking clarifying questions, creating designs, and planning implementation. You review and approve at each stage.
+
+### 4. Review and approve each stage
+
+AI-DLC works in phases:
+- **Inception**: Requirements analysis, user stories, application design, workflow planning
+- **Construction**: Functional design, code generation, build and test
+- **Operations**: Deployment (handled by cic-deployment agent)
+
+At each stage, AI-DLC waits for your explicit approval before proceeding. Review the generated documentation in `aidlc-docs/` as it's created.
+
+### 5. Implementation
+
+During the Construction phase, AI-DLC delegates code generation to specialized CIC subagents (cic-backend, cic-frontend) that follow CIC standards automatically.
 
 ### 6. Deploy the application
 

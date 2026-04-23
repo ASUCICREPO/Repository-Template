@@ -13,7 +13,7 @@ This document provides comprehensive information about using AI-DLC (AI Developm
 - [Writing Effective Prompts](#writing-effective-prompts)
 - [How AI-DLC Works](#how-ai-dlc-works)
 - [Prerequisites](#prerequisites)
-- [Adding Custom Rules](#adding-custom-rules-to-cic-extensions-optional)
+- [CIC Standards](#cic-standards)
 - [Generated Files](#generated-files)
 - [Team Collaboration](#team-collaboration)
 
@@ -125,104 +125,19 @@ For detailed guidance on how teams can work together using AI-DLC, including wor
 
 ## Prerequisites
 
-Before starting development or deployment, you MUST run the AI-DLC update script once to ensure you have the latest workflow rules:
+The AI-DLC methodology is installed as a Kiro Power in `.kiro/powers/ai-dlc-methodology/`. No additional setup is needed — it's included in this template.
 
-```bash
-./update-aidlc.sh
-```
+To update to the latest AI-DLC version, pull the latest files from the [sample-aidlc-kiro-power](https://github.com/aws-samples/sample-aidlc-kiro-power) repo and replace the contents of `.kiro/powers/ai-dlc-methodology/`.
 
-This script:
-- Downloads the latest AI-DLC workflow rules from the official repository
-- Updates core steering files and rule details
-- Preserves any custom extensions you've added
-- Should be run periodically to get the latest best practices and standards
-
-**What the script does:**
-- Fetches the latest release from `awslabs/aidlc-workflows`
-- Updates `.kiro/steering/aws-aidlc-rules/` (core workflow rules)
-- Updates `.kiro/aws-aidlc-rule-details/` (detailed implementation guides)
-- Preserves custom extensions in `aws-aidlc-rule-details/extensions/`
+For MCP server and Powers configuration, run the "Validate CIC Tools" hook from the Agent Hooks panel, or review `.kiro/steering/cic-tool-use-standards.md` for the full tool setup guide.
 
 ---
 
-## Adding Custom Rules to CIC Extensions (Optional)
+## CIC Standards
 
-This project includes CIC-specific extension files for adding custom development rules. Add rules only if you want to enforce CIC specific standards.
+CIC-specific development standards (serverless-first architecture, CDK patterns, security requirements) are enforced through Kiro steering files in `.kiro/steering/`. These apply automatically based on the files you're working with — no manual configuration needed.
 
-### Extension Files
-
-- **Rules file**: `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.md`
-- **Opt-in file**: `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.opt-in.md`
-
-### Example: Adding Rules to cic-specifics.md
-
-Edit `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.md`:
-
-```markdown
-# CIC-Specific Development Rules
-
-## Overview
-These rules enforce CIC-specific development standards. They are blocking constraints that apply across all AI-DLC phases.
-
----
-
-## Rule CIC-01: Resource Naming
-
-**Rule**: All AWS resources must follow pattern: `{env}-{app}-{resource}-{id}`
-
-**Verification**:
-- All resource names follow the pattern
-- Environment is one of: dev, staging, prod
-
----
-
-## Rule CIC-02: Required Tags
-
-**Rule**: All resources must include tags: CostCenter, Owner, Environment
-
-**Verification**:
-- All resources have CostCenter tag
-- All resources have Owner tag
-- All resources have Environment tag
-```
-
-**Rule format:**
-- Each rule: `## Rule CIC-NN: Title` (use CIC prefix, number sequentially)
-- Include **Rule** section describing the requirement
-- Include **Verification** section with concrete checks
-
-### Adding Opt-in to cic-specifics.opt-in.md
-
-Edit `.kiro/aws-aidlc-rule-details/extensions/cic-extensions/cic-specifics.opt-in.md`:
-
-```markdown
-# CIC-Specific Rules — Opt-In
-
-**Extension**: CIC-Specific Development Standards
-
-## Opt-In Prompt
-
-\`\`\`markdown
-## Question: CIC Development Standards
-Should CIC-specific development standards be enforced?
-
-A) Yes — enforce CIC rules
-B) No — skip CIC rules
-
-[Answer]: 
-\`\`\`
-```
-
-**Opt-in format:**
-- Wrap question in markdown code block (triple backticks)
-- Provide A/B options
-- Include `[Answer]:` tag
-
-### Reference Examples
-
-See built-in security extension for complete examples:
-- `.kiro/aws-aidlc-rule-details/extensions/security/baseline/security-baseline.md`
-- `.kiro/aws-aidlc-rule-details/extensions/security/baseline/security-baseline.opt-in.md`
+See `.kiro/steering/backend/backend-standards.md` for backend patterns and `.kiro/steering/security/` for security requirements.
 
 ---
 

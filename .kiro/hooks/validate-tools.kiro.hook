@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Validate CIC Tools",
+  "description": "On-demand validation of Powers, MCP servers, and AI-DLC Power installation. Click to run.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "The user has triggered a tool validation check. Perform a comprehensive audit:\n\n**Step 1: AI-DLC Power**\n- Check if `.kiro/powers/ai-dlc-methodology/` exists\n- Verify it contains `POWER.md`, `steering/core-workflow.md`, and `workflows/` directory\n- If missing → Instruct user: clone https://github.com/aws-samples/sample-aidlc-kiro-power and copy `powers/ai-dlc-methodology/` to `.kiro/powers/`\n\n**Step 2: Tier 1 MCP Servers (Mandatory)**\nRead `.kiro/settings/mcp.json` and verify these are present and enabled (disabled: false or field absent):\n- git (key contains 'git')\n- context7 (key contains 'context7')\n- fetch (key contains 'fetch')\n- aws-diagram (key contains 'aws-diagram')\n- aws-knowledge-mcp-server (key contains 'aws-knowledge')\n\n**Step 3: Installed Powers**\nRun `kiroPowers list` and report what's available.\n\n**Step 4: AWS Configuration**\nCheck if any env values in mcp.json contain `<YOUR_AWS_PROFILE>` or `<YOUR_AWS_REGION>` placeholders.\n\n**Step 5: Report**\nShow results:\n- ✅ Installed and configured\n- ❌ Missing (with specific install instructions)\n- ⚠️ Placeholder warnings (not blocking)\n\nFor missing Tier 1 MCPs, provide the exact JSON entry to add to mcp.json.\nFor missing Powers, direct user to the Powers panel (kiroPowers configure)."
+  }
+}
