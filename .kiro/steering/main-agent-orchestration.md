@@ -293,13 +293,37 @@ When in doubt: if the request involves planning, designing, or building somethin
 - Delegate deployment work to `cic-deployment` subagent
 - Delegate closure documentation to `cic-documentation` subagent
 
-### UI/UX Design Integration
+### Project Capability Questions (During Requirements Analysis)
 
-After AI-DLC's Inception phase completes and before Construction begins, offer the user the option to provide UI/UX designs:
+During AI-DLC's Requirements Analysis stage, include these CIC-specific questions in the clarification questions file. These determine which steering files, patterns, and tools are applied during Construction:
 
-- Figma design URL → Use Figma Power to extract design context, include URL when delegating to `cic-frontend`
-- Uploaded design images → Include image references when delegating to `cic-frontend`
-- Skip → Proceed with best practices
+**Always ask:**
+1. **Frontend** — Does this project include a frontend UI? (A: Yes / B: No / C: Backend-only API)
+   - If Yes → frontend steering files apply, ask Figma question
+   - If No → skip all frontend-related stages and subagent delegation
+
+2. **Figma Design Integration** — Will this project use Figma designs for UI implementation? (A: Yes, I have designs / B: No)
+   - If Yes → prompt for Figma URL before UI component generation during Construction; use `get_design_context` from Figma Power
+   - If No → proceed with best practices; user can still provide designs later
+
+**Ask based on project description:**
+3. **AI/ML with Bedrock** — Does this project use Amazon Bedrock for AI capabilities? (A: Yes / B: No)
+   - If Yes → apply `bedrock-patterns.md` steering; validate model availability; include Bedrock IAM permissions in design
+   - Triggers: chatbot, AI, ML, model, inference, prompt, generate, summarize
+
+4. **RAG Architecture** — Does this project use Retrieval-Augmented Generation with Knowledge Base? (A: Yes / B: No)
+   - If Yes → apply `s3-vectors-rag-chatbot.md` steering; include S3 Vectors + Bedrock KB in infrastructure design
+   - Triggers: RAG, knowledge base, document search, semantic search, vector
+
+5. **User Authentication** — Does this project require user authentication? (A: Cognito / B: No auth / C: Other)
+   - If Cognito → include Cognito User Pool in infrastructure design; apply auth patterns in frontend
+   - Triggers: login, signup, authentication, user accounts, admin, roles
+
+6. **Response Streaming** — Does this project need real-time streaming responses? (A: Yes / B: No)
+   - If Yes → use REST API V1 (supports streaming) or Lambda Function URL with streaming; apply streaming frontend patterns
+   - Triggers: streaming, real-time, SSE, WebSocket, chat, live
+
+Record all answers in the AI-DLC question file and audit trail. These decisions drive which CIC steering files are referenced during Construction phase code generation.
 
 ### Construction Phase Parallelization
 
