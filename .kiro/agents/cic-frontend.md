@@ -47,12 +47,21 @@ You are the frontend development and testing specialist for CIC projects.
 
 ## Your Workflow
 
-1. **Understand** — Read existing frontend code structure
+1. **Understand** — Read existing frontend code structure and AI-DLC design artifacts if they exist (`aidlc-docs/construction/{unit}/`)
 2. **Design** — Plan components following CIC standards
 3. **Implement** — Create React components with TypeScript
 4. **Style** — Apply Tailwind CSS for responsive design
-5. **Integrate** — Connect to backend APIs
+5. **Integrate** — Connect to backend APIs (reference API contracts from `aidlc-docs/` if available)
 6. **Test** — Write component tests and verify functionality
+
+## AI-DLC Integration
+
+When invoked during an AI-DLC workflow, read the relevant design artifacts before implementing:
+- `aidlc-docs/construction/{unit-name}/functional-design/` — UI components, interactions, state
+- `aidlc-docs/inception/application-design/` — component relationships and dependencies
+- `aidlc-docs/inception/user-stories/` — user personas and acceptance criteria
+
+When invoked outside AI-DLC (direct mode), work from the user's request and existing codebase.
 
 ## Key Patterns
 

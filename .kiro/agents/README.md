@@ -13,8 +13,7 @@ Specialized AI agents for CIC project development.
 | cic-frontend | `cic-frontend.md` | Next.js frontend development and testing |
 | cic-deployment | `cic-deployment.md` | Deployment verification, debugging, AWS resource querying |
 | cic-security | `cic-security.md` | Security auditing and compliance (read-only) |
-| cic-documentation | `cic-documentation.md` | Documentation updates (existing files only) |
-| cic-project-specs | `cic-project-specs.md` | Project specification creation from scope documents |
+| cic-documentation | `cic-documentation.md` | Documentation updates, AI-DLC to closure docs synthesis |
 
 ## Key Rules (All Agents)
 
@@ -24,12 +23,13 @@ Specialized AI agents for CIC project development.
 
 ## Workflow Patterns
 
-### Project Initialization (New Projects)
-1. **cic-project-specs** → Create requirements.md (get approval) → design.md (get approval) → tasks.md
-2. **cic-backend** → Implement backend tasks from tasks.md
-3. **cic-frontend** → Implement frontend tasks from tasks.md
-4. **cic-security** → Security audit
-5. **cic-documentation** → Update project docs
+### Project Initialization (New Projects via AI-DLC)
+1. **Main agent** → Drives AI-DLC Inception phase (requirements, design, planning) using the AI-DLC Power
+2. **cic-backend** → Implement backend units from AI-DLC code generation plan
+3. **cic-frontend** → Implement frontend units from AI-DLC code generation plan
+4. **cic-security** → Security audit against CIC standards
+5. **cic-deployment** → Deploy and verify
+6. **cic-documentation** → Synthesize `aidlc-docs/` into closure docs in `docs/`
 
 ### Full-Stack Feature
 1. **cic-backend** → CDK stack + Lambda + tests → ends at `cdk synth`

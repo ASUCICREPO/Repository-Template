@@ -34,12 +34,11 @@ When you see ANY of these keywords in a user request, you MUST delegate to the c
 - security, scan, audit, IAM review, compliance, cdk-nag, secrets, vulnerability, hardcoded, credentials, encryption, permissions
 
 **Documentation Keywords** → `cic-documentation`
-- documentation, README, API docs, architecture, ADR, guide, document, write docs, explain architecture
+- documentation, README, API docs, architecture, guide, document, write docs, explain architecture, closure docs
 
-**Project Spec Keywords** → `cic-project-specs`
-- create spec, project spec, spec from scope, scope document, new project spec, generate spec, spec creation, project specifications, create project specs
+> **Keyword Precedence (highest to lowest):** Deployment > Security > Backend > Frontend > Documentation. When a request matches multiple keyword lists, delegate to the highest-priority matching agent. For example, "deploy the Lambda function" matches both Backend and Deployment — delegate to `cic-deployment`.
 
-> **Keyword Precedence (highest to lowest):** Deployment > Security > Backend > Frontend > Documentation > Project Spec. When a request matches multiple keyword lists, delegate to the highest-priority matching agent. For example, "deploy the Lambda function" matches both Backend and Deployment — delegate to `cic-deployment`.
+> **AI-DLC Workflow:** When the user says "using AI-DLC" or asks to start a new project from specs/scope, follow the AI-DLC Integration section below instead of keyword-triggered delegation. AI-DLC handles the Inception phase (requirements, design, planning). Subagent delegation happens during the Construction phase.
 
 ### Rule 2: Multi-File Implementation
 
@@ -237,201 +236,84 @@ Example: "Add monitoring and improve documentation"
 
 **Important:** Subagents run with isolated context and cannot share information during parallel execution. Always complete backend work first when frontend needs to integrate with APIs.
 
-## Project Spec Creation Pattern
+## AI-DLC Integration
 
-When creating project specs, delegate to `cic-project-specs` using a **3-phase preset workflow**. Specs can be created from:
-1. **Scope documents** (files in directory like `project-scope/`)
-2. **User description** (chat message describing project)
+The AI-DLC Power (`.kiro/powers/ai-dlc-methodology/`) provides the development workflow. The main agent orchestrates AI-DLC's phases and delegates implementation to CIC subagents.
 
-### Workflow
+### When AI-DLC Activates
 
-1. **Gather info**: Read scope docs OR use user description
-2. **Identify domain**: Backend, frontend, full-stack, or security-critical
-3. **Feature name**: Extract or create kebab-case (e.g., "simple-chatbot")
-4. **Execute 3 phases**: Invoke `cic-project-specs` with presets: "requirements" → "design" → "tasks"
+AI-DLC activates when:
+- User says "using AI-DLC: ..." or "using AI-DLC, ..."
+- User asks to start a new project from a scope document or description
+- User asks to create specs, requirements, or designs for a new feature
 
-## Spec Task Execution & Parallelization
+### Main Agent's Role in AI-DLC
 
-When executing tasks from tasks.md:
+**Inception Phase (main agent drives directly):**
+- Follow the AI-DLC core workflow in `.kiro/powers/ai-dlc-methodology/steering/core-workflow.md`
+- Load workflow files from `.kiro/powers/ai-dlc-methodology/workflows/` as directed
+- Execute workspace detection, requirements analysis, user stories, application design, units generation
+- Present approval gates to the user at each stage
+- The main agent handles Inception directly — do NOT delegate to subagents during Inception
 
-**Test Execution Timing:**
-- ❌ Do NOT add tests during initial implementation of each task
-- ✅ Add tests ONLY after ALL implementation tasks are complete
-- Rationale: Running tests multiple times during development is inefficient and frustrating
-- Exception: If user explicitly requests tests during implementation
+**Construction Phase (main agent delegates to subagents):**
+- AI-DLC produces a code generation plan with checkboxes for each unit of work
+- For each code generation step, delegate to the appropriate CIC subagent:
+  - Backend steps (CDK, Lambda, DynamoDB, S3, API Gateway) → `cic-backend`
+  - Frontend steps (React, Next.js, Tailwind, pages) → `cic-frontend`
+  - Deployment artifacts (deploy scripts, buildspec) → `cic-deployment`
+- After each subagent completes, mark the corresponding checkbox in the AI-DLC plan
+- Include the path to the unit's design artifacts when delegating:
+  ```
+  invokeSubAgent(
+    name: "cic-backend",
+    prompt: "Implement the backend infrastructure for [unit-name].
+  
+  Read the design artifacts at:
+  - aidlc-docs/construction/{unit-name}/functional-design/
+  - aidlc-docs/construction/{unit-name}/infrastructure-design/
+  - aidlc-docs/construction/{unit-name}/nfr-requirements/
+  
+  Follow CIC standards from steering files. [specific implementation details]"
+  )
+  ```
+
+**Operations Phase (delegate to cic-deployment):**
+- AI-DLC's Operations phase is a placeholder
+- Delegate deployment work to `cic-deployment` subagent
+- Delegate closure documentation to `cic-documentation` subagent
+
+### UI/UX Design Integration
+
+After AI-DLC's Inception phase completes and before Construction begins, offer the user the option to provide UI/UX designs:
+
+- Figma design URL → Use Figma Power to extract design context, include URL when delegating to `cic-frontend`
+- Uploaded design images → Include image references when delegating to `cic-frontend`
+- Skip → Proceed with best practices
+
+### Construction Phase Parallelization
+
+During AI-DLC's Construction phase, apply these rules when delegating to subagents:
 
 **Parallel Execution Rules:**
-- ✅ Different domains (backend + frontend, frontend + backend deployment)
-- ✅ Different files/modules (Lambda A + Lambda B)
-- ✅ Multiple instances of same agent (2x cic-backend for independent Lambdas)
+- ✅ Backend + frontend for the same unit (after API contract is defined in design artifacts)
+- ✅ Different units with no shared dependencies
+- ✅ Multiple instances of same agent (2x cic-backend for independent units)
 - ❌ Shared files or dependencies (A needs B's output)
 - ❌ Infrastructure + code using it (deploy infra first)
+- ❌ Frontend integration before API contract is defined in design artifacts
 
 **Quick Check:** Can both tasks complete without knowing the other's result? → Parallelize
 
-**Example:**
-Good: cic-backend (ChatLambda) + cic-backend (MatchLambda) + cic-frontend (setup) 
-Bad: cic-backend (shared utils) + cic-backend (Lambda using those utils)
-
 **Default:** Execute sequentially. Parallelize only when clearly independent.
 
-### UI/UX Design Upload (After Tasks.md Creation)
+### Test Execution Timing
 
-**CRITICAL**: After tasks.md is created and before implementation begins, offer the user the option to provide UI/UX designs:
+When AI-DLC's code generation plan includes test steps, follow the plan's ordering. When operating outside AI-DLC (direct subagent delegation), defer tests until all implementation is complete unless the user explicitly requests them.
 
-```
-After Phase 3 completes:
-1. Summarize tasks.md creation
-2. Ask: "Would you like to provide UI/UX designs for the frontend implementation?
-   
-   Options:
-   - Share a Figma design URL (I can extract design context automatically)
-   - Upload design images/mockups (PNG, JPG, etc.)
-   - Skip and use best practices
-   
-   I can use these as reference when implementing the frontend."
+### Post-Implementation
 
-3. If user provides Figma URL:
-   - Use Figma Power to extract design context
-   - Store design reference in .kiro/specs/{feature-name}/designs/
-   - Include Figma URL when delegating to cic-frontend
-   
-4. If user uploads images:
-   - Store references in .kiro/specs/{feature-name}/designs/
-   - Include image references when delegating to cic-frontend
-   
-5. If user declines or has no designs:
-   - Proceed with implementation using best practices
-```
-
-**Design Reference Pattern:**
-
-When delegating to cic-frontend with Figma designs:
-```
-invokeSubAgent(
-  name: "cic-frontend",
-  prompt: "Implement [component] following the Figma design.
-
-Figma design URL: https://figma.com/design/...
-
-The cic-frontend agent will automatically use Figma Power to extract design context.
-
-[Rest of implementation details]"
-)
-```
-
-When delegating to cic-frontend with uploaded images:
-```
-invokeSubAgent(
-  name: "cic-frontend",
-  prompt: "Implement [component] following the uploaded design mockup.
-
-Design reference: .kiro/specs/{feature-name}/designs/mockup.png
-
-[Rest of implementation details]"
-)
-```
-
-### Phase Examples
-
-**Phase 1: Requirements (preset="requirements")**
-
-From scope docs:
-```
-invokeSubAgent(
-  name: "cic-project-specs",
-  preset: "requirements",
-  prompt: "Create requirements.md from scope documents:
-  
-[Scope Content]
-
-Feature name: medical-specialty-matchmaker
-
-[Include all steering files from section above]"
-)
-```
-
-From user description:
-```
-invokeSubAgent(
-  name: "cic-project-specs",
-  preset: "requirements",
-  prompt: "Create requirements.md from description:
-  
-'Create a simple chatbot using Claude Sonnet 3.7'
-
-Feature name: simple-chatbot
-
-[Include all steering files from section above]"
-)
-```
-
-**AFTER Phase 1 completes:**
-1. Summarize what was created (key sections, scope)
-2. Ask user: "Please review requirements.md. Should I proceed to Phase 2 (design)?"
-3. WAIT for user confirmation before invoking Phase 2
-4. Do NOT proceed automatically
-
-**Phase 2: Design (preset="design")**
-```
-invokeSubAgent(
-  name: "cic-project-specs",
-  preset: "design",
-  prompt: "Create design.md for simple-chatbot.
-
-Read requirements.md from .kiro/specs/simple-chatbot/
-
-[Include all steering files from section above]"
-)
-```
-
-**AFTER Phase 2 completes:**
-1. Summarize what was created (architecture, key design decisions)
-2. Ask user: "Please review design.md. Should I proceed to Phase 3 (tasks)?"
-3. WAIT for user confirmation before invoking Phase 3
-4. Do NOT proceed automatically
-
-**Phase 3: Tasks (preset="tasks")**
-```
-invokeSubAgent(
-  name: "cic-project-specs",
-  preset: "tasks",
-  prompt: "Create tasks.md for simple-chatbot.
-
-Read requirements.md and design.md from .kiro/specs/simple-chatbot/
-
-[Include all steering files from section above]"
-)
-```
-
-**AFTER Phase 3 completes:**
-1. Summarize what was created (task breakdown, implementation order)
-2. Inform user: "Spec creation complete! All three documents (requirements.md, design.md, tasks.md) are ready."
-3. **Ask about UI/UX designs**: "Would you like to upload any UI/UX design images or mockups? I can use them as reference when implementing the frontend."
-4. Wait for user response before proceeding to implementation
-
-### Steering Files for cic-project-specs
-
-Always include these steering files when invoking cic-project-specs (all phases):
-
-```
-#[[file:.kiro/steering/architecture-diagrams.md]]
-#[[file:.kiro/steering/backend/backend-standards.md]]
-#[[file:.kiro/steering/frontend/frontend-core.md]]
-#[[file:.kiro/steering/frontend/frontend-integration-api.md]]
-#[[file:.kiro/steering/frontend/frontend-integration-aws.md]]
-#[[file:.kiro/steering/frontend/frontend-integration-patterns.md]]
-#[[file:.kiro/steering/frontend/frontend-state-i18n.md]]
-#[[file:.kiro/steering/frontend/frontend-styling.md]]
-#[[file:.kiro/steering/security/security-iam-secrets.md]]
-#[[file:.kiro/steering/security/security-data-encryption.md]]
-#[[file:.kiro/steering/security/security-operations.md]]
-#[[file:.kiro/steering/security/security-code-dependencies.md]]
-#[[file:.kiro/steering/security/security-compliance.md]]
-#[[file:.kiro/steering/security/security-scanning.md]]
-```
-
-**Add for RAG/AI features:**
-```
-#[[file:.kiro/steering/backend/s3-vectors-rag-chatbot.md]]
-```
+After all Construction phase units are complete:
+1. `cic-security`: Run security audit against CIC standards
+2. `cic-deployment`: Create deployment script and/or buildspec
+3. `cic-documentation`: Synthesize `aidlc-docs/` into formal closure docs in `docs/`
