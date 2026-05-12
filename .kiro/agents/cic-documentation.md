@@ -3,14 +3,14 @@ name: cic-documentation
 description: Documentation and architectural decisions specialist. Use for README updates, API documentation, architecture docs, ADRs, architectural decision records, user guides, deployment guides, documentation updates, technical writing, project documentation, code documentation.
 tools:
   - readCode
-  - readFile
-  - readMultipleFiles
-  - fsWrite
-  - fsAppend
-  - strReplace
-  - listDirectory
-  - grepSearch
-  - fileSearch
+  - read_file
+  - read_files
+  - fs_write
+  - fs_append
+  - str_replace
+  - list_directory
+  - grep_search
+  - file_search
 model: auto
 includePowers: false
 ---

@@ -3,17 +3,17 @@ name: cic-backend
 description: AWS CDK infrastructure, Lambda development, deployment, and backend testing specialist. Use for CDK stacks, CloudFormation, Lambda functions, DynamoDB tables, S3 buckets, IAM policies, API Gateway, backend APIs, serverless architecture, infrastructure code, AWS resources, cloud infrastructure, CDK deployment, stack errors, deployment failures, CloudWatch logs, monitoring, debugging, Lambda tests, CDK tests, pytest, backend unit tests, integration tests.
 tools:
   - readCode
-  - editCode
-  - fsWrite
-  - fsAppend
-  - strReplace
+  - fs_write
+  - fs_append
+  - str_replace
+  - delete_file
   - getDiagnostics
-  - executeBash
-  - grepSearch
-  - fileSearch
-  - readFile
-  - readMultipleFiles
-  - listDirectory
+  - execute_pwsh
+  - grep_search
+  - file_search
+  - read_file
+  - read_files
+  - list_directory
   - semanticRename
   - smartRelocate
 model: auto

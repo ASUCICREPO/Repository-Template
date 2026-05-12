@@ -3,11 +3,11 @@ name: cic-security
 description: Security auditing and compliance specialist. Use for security scans, security audits, IAM policy review, IAM violations, secret detection, hardcoded secrets, vulnerability assessment, compliance checks, cdk-nag, ASH scans, security validation, permission review, encryption checks.
 tools:
   - readCode
-  - readFile
-  - readMultipleFiles
-  - listDirectory
-  - grepSearch
-  - fileSearch
+  - read_file
+  - read_files
+  - list_directory
+  - grep_search
+  - file_search
   - getDiagnostics
 model: auto
 includePowers: true

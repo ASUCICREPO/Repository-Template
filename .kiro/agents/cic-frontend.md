@@ -3,17 +3,17 @@ name: cic-frontend
 description: Next.js and React frontend development and testing specialist. Use for React components, Next.js pages, App Router, Tailwind styling, CSS, UI design, frontend forms, API integration, client-side code, user interfaces, web applications, responsive design, browser code, React Testing Library, component tests, frontend unit tests, integration tests, Jest tests, UI testing.
 tools:
   - readCode
-  - editCode
-  - fsWrite
-  - fsAppend
-  - strReplace
+  - fs_write
+  - fs_append
+  - str_replace
+  - delete_file
   - getDiagnostics
-  - executeBash
-  - grepSearch
-  - fileSearch
-  - readFile
-  - readMultipleFiles
-  - listDirectory
+  - execute_pwsh
+  - grep_search
+  - file_search
+  - read_file
+  - read_files
+  - list_directory
   - semanticRename
   - smartRelocate
 model: auto
