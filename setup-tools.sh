@@ -29,10 +29,6 @@ echo ""
 echo "Pre-installing MCP server packages (this may take a few minutes on first run)..."
 echo ""
 
-echo "  → aws-diagram-mcp-server..."
-uvx awslabs.aws-diagram-mcp-server@latest --help >/dev/null 2>&1 || true
-echo "    ✅ cached"
-
 echo "  → mcp-server-fetch..."
 uvx mcp-server-fetch --help >/dev/null 2>&1 || true
 echo "    ✅ cached"

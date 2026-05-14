@@ -37,8 +37,13 @@ These are required for every CIC project:
 | git | MCP | GitHub operations (commits, branches, PRs, issues) |
 | context7 | MCP | Up-to-date library/framework documentation |
 | fetch | MCP | Web content fetching for documentation access |
-| aws-diagram | MCP | Architecture diagram generation |
 | aws-knowledge-mcp-server | MCP (HTTP) | AWS blogs, latest updates, service announcements |
+
+### Required Local Skill
+
+| Skill | Type | Purpose |
+|---|---|---|
+| aws-architecture-diagram | Local Skill (`.kiro/skills/`) | Architecture diagram generation (draw.io XML with AWS4 icons) |
 
 ### Required Local Power
 
@@ -72,7 +77,7 @@ When requirements mention specific AWS services, search for relevant Powers via 
 | CloudTrail | `uvx awslabs.cloudtrail-mcp-server@latest` | Security auditing, access logs |
 | AWS Documentation | `uvx awslabs.aws-documentation-mcp-server@latest` | Official AWS docs search |
 | IAM Policy Autopilot | `uvx iam-policy-autopilot@latest mcp-server` | Policy generation from code |
-| AWS Diagrams | `uvx awslabs.aws-diagram-mcp-server@latest` | Architecture diagram generation |
+| AWS Diagrams | Local skill: `.kiro/skills/aws-architecture-diagram/` | Replaced deprecated MCP; uses draw.io XML with AWS4 icons |
 | AWS Knowledge/Blogs | HTTP: `https://knowledge-mcp.global.api.aws` | Latest AWS updates, blog posts |
 | Figma | HTTP: `https://mcp.figma.com/mcp` | Design system integration |
 | GitHub | `npx -y @modelcontextprotocol/server-github` | Git operations |

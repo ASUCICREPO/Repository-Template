@@ -65,7 +65,9 @@ Architecture sections in design.md must use this structure:
 
 ### Generating PNG from Architecture
 
-After creating the draw.io XML in design.md, also generate a PNG version using the AWS Diagram MCP server (`generate_diagram` tool with the `diagrams` Python package). Save the PNG to `architecture_diagram/` at the repo root.
+After creating the draw.io XML in design.md, generate a PNG version by opening the `.drawio` file in VS Code (with the draw.io extension) or diagrams.net and exporting. Save the PNG to `architecture_diagram/` at the repo root.
+
+Alternatively, use the `aws-architecture-diagram` skill (`.kiro/skills/aws-architecture-diagram/`) which provides draw.io XML generation with AWS4 icons and a validation script.
 
 Reference the PNG in design.md below the draw.io block:
 

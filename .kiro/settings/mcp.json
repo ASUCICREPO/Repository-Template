@@ -48,21 +48,6 @@
       ],
       "description": "Fetch web content and convert to markdown for documentation access"
     },
-    "aws-diagram": {
-      "command": "uvx",
-      "args": [
-        "awslabs.aws-diagram-mcp-server@latest"
-      ],
-      "env": {
-        "FASTMCP_LOG_LEVEL": "ERROR"
-      },
-      "disabled": false,
-      "autoApprove": [
-        "generate_diagram",
-        "get_diagram_examples",
-        "list_icons"
-      ]
-    },
     "aws-knowledge-mcp-server": {
       "url": "https://knowledge-mcp.global.api.aws",
       "type": "http",
