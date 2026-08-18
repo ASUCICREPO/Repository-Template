@@ -2,7 +2,7 @@
 
 ## cdk-nag (Infrastructure Security)
 
-Already integrated via `AwsSolutionsChecks` in `backend/bin/backend.ts`. Runs on every `cdk synth`.
+Already integrated via `AwsSolutionsChecks` in `backend/lib/backend-stack.ts`. Runs on every `cdk synth`.
 
 **Checks**: IAM policies, S3 security, Lambda configs, DynamoDB encryption, API Gateway security.
 

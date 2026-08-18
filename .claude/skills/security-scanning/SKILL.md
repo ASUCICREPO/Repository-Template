@@ -6,7 +6,7 @@ description: Run CIC security scans using cdk-nag and ASH (Automated Security He
 Read `references/spec.md` for scan commands, ASH setup, and output interpretation. Also see the `security-check-workflow` skill in the `cic-core` plugin for the full 8-step workflow.
 
 **cdk-nag (infrastructure security)**:
-- Already integrated via `AwsSolutionsChecks` in `backend/bin/backend.ts`
+- Already integrated via `AwsSolutionsChecks` in `backend/lib/backend-stack.ts`
 - Runs automatically on every `cdk synth`
 - Checks: IAM policies, S3 security, Lambda configs, DynamoDB encryption, API Gateway security
 - Fix all `[Error]` findings before deploying

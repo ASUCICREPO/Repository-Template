@@ -2,7 +2,9 @@
 
 Specialized AI agents for CIC project development, operating within AI-DLC's Construction phase.
 
-- CIC org standards: `aidlc-rules/aws-aidlc-rule-details/extensions/cic/standards/cic-standards.md`
+- CIC backend standards: `.kiro/steering/backend/`
+- CIC frontend standards: `.kiro/steering/frontend/`
+- CIC security standards: `.kiro/steering/security/`
 - Orchestration rules: `.kiro/steering/cic-orchestration.md`
 - Tool discovery: `.kiro/steering/cic-tool-use-standards.md`
 

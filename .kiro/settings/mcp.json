@@ -9,11 +9,6 @@
       "env": {},
       "disabled": false,
       "autoApprove": [
-        "get_file_contents",
-        "get_file_contents",
-        "get_file_contents",
-        "get_file_contents",
-        "get_file_contents",
         "get_file_contents"
       ],
       "description": "Git operations: status, commit, branch, push, pull, diff, log"
@@ -33,9 +28,6 @@
       "env": {},
       "disabled": false,
       "autoApprove": [
-        "fetch",
-        "fetch",
-        "fetch",
         "fetch"
       ],
       "description": "Fetch web content and convert to markdown for documentation access"
