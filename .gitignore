@@ -56,3 +56,6 @@ yarn-error.log*
 
 # Vercel
 .vercel
+
+# Claude Code memory (per CIC git rules — never committed)
+CLAUDE.md
