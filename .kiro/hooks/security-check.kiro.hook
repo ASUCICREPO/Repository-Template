@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Security Check",
+  "description": "Run intelligent security checks using cdk-nag and/or ASH. Analyzes scope, runs tools, and provides remediation guidance.",
+  "version": "1",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "The user has triggered a security check. Delegate this task to the cic-security subagent using invokeSubAgent tool with the following prompt:\n\n'Perform a security audit following the workflow in #security-check-workflow.md:\n1. Ask the user what scope they want to scan (specific files/dirs, backend only, frontend only, or full codebase)\n2. Determine which tools to use based on their response\n3. Run the appropriate security scans (cdk-nag, ASH, or code analysis)\n4. Parse and prioritize findings by severity (Critical > High > Medium > Low)\n5. Provide detailed remediation guidance with code examples\n6. Report findings to the main agent for user review'\n\nAfter the security agent completes the audit, review the findings and ask the user if they want to apply fixes. If yes, delegate fixes to the appropriate agent (cic-backend or cic-frontend)."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Validate Tools Before Subagent Delegation",
+  "description": "Capability-driven tool discovery: checks Powers and MCPs against project needs before first subagent invocation.",
+  "version": "1",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": [
+      ".*invokeSubAgent.*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are about to invoke a subagent. Perform capability-driven tool validation:\n\n**Step 1: Check if this is the first subagent invocation**\n- Has tool validation already been completed this session?\n- If YES → Skip validation and proceed with subagent invocation\n- If NO → Continue to Step 2\n\n**Step 2: Capability-driven discovery**\n\n1. Read the capability map from .kiro/steering/cic-tool-use-standards.md\n2. Scan project context (any requirements, design docs, or user description) for capability keywords\n3. Run kiroPowers list to check installed Powers\n4. Read .kiro/settings/mcp.json to check configured MCP servers\n\n**Step 3: Validate Tier 1 (Mandatory Baseline)**\n\nVerify these MCP servers are in mcp.json and enabled:\n- git (@modelcontextprotocol/server-github)\n- context7 (https://mcp.context7.com/mcp)\n- fetch (mcp-server-fetch)\n- aws-diagram (awslabs.aws-diagram-mcp-server)\n- aws-knowledge-mcp-server (https://knowledge-mcp.global.api.aws)\n\n**Step 4: Validate Tier 2 (Capability-Driven)**\n\nFor each capability keyword found in project context:\n- Check if the preferred Power is installed (from kiroPowers list)\n- If Power is missing → Flag for user to install via Powers panel\n- If no Power equivalent exists → Check if MCP fallback is in mcp.json\n- If MCP fallback is missing → Offer to add it to mcp.json\n\n**Step 5: Check AWS Configuration**\n\nIn mcp.json, check if any env values contain placeholders:\n- <YOUR_AWS_PROFILE> or <YOUR_AWS_REGION>\n- If found → WARN user (not blocking)\n\n**Step 6: Report**\n\nShow validation checklist:\n- ✅ for tools that pass (Powers in list, MCPs in config and enabled)\n- ❌ for missing tools (with install instructions)\n- ⚠️ for AWS placeholder warnings (not blocking)\n- If ANY ❌ in Tier 1 → STOP and help user fix\n- If ALL Tier 1 ✅ → Proceed with subagent invocation (Tier 2 gaps are warnings, not blockers)"
+  }
+}
