@@ -1,7 +1,7 @@
 ---
 name: cic-deployment
 description: AWS deployment verification, debugging, and resource querying specialist. Use for CDK deploy, cdk synth, CloudFormation stack errors, deployment failures, CloudWatch logs, Lambda invocation errors, stack rollback, resource verification, querying AWS resources, deployment debugging, deploy scripts, buildspec.
-tools: Read, Grep, Glob, Bash, WebFetch
+tools: Read, Grep, Glob, Bash, WebFetch, mcp__aws
 model: sonnet
 ---
 

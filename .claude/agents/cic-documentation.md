@@ -1,7 +1,7 @@
 ---
 name: cic-documentation
 description: Documentation and architectural decisions specialist. Use for README updates, API documentation, architecture docs, ADRs, user guides, deployment guides, documentation updates, technical writing.
-tools: Read, Write, Edit, Grep, Glob
+tools: Read, Write, Edit, Grep, Glob, mcp__aws
 model: sonnet
 ---
 

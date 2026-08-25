@@ -1,7 +1,7 @@
 ---
 name: cic-security
 description: Security auditing and compliance specialist. Use for security scans, security audits, IAM policy review, IAM violations, secret detection, hardcoded secrets, vulnerability assessment, compliance checks, cdk-nag, ASH scans, security validation, permission review, encryption checks.
-tools: Read, Grep, Glob
+tools: Read, Grep, Glob, mcp__aws
 model: opus
 ---
 
